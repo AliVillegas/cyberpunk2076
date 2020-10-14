@@ -40,7 +40,8 @@ if (isMobile.Android() || isMobile.iOS()) {
 } else {
     var mobileMessage = document.getElementById("mobileMessage");
     mobileMessage.style.display = "none";
-
+    var game = document.getElementById("game");
+    game.style.display = "block";
 }
 
 if (WEBGL.isWebGLAvailable()) {
