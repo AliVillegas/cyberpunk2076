@@ -88,6 +88,8 @@ if (WEBGL.isWebGLAvailable()) {
 
         renderer.setPixelRatio(window.devicePixelRatio)
         renderer.setSize(window.innerWidth, window.innerHeight)
+        scene.background = new THREE.Color(0x222222);
+
         document.body.appendChild(renderer.domElement)
 
         // Instantiate a loader
