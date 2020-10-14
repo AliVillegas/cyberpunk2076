@@ -22,17 +22,8 @@ if (WEBGL.isWebGLAvailable()) {
 
     //TWEEN 
     let interpolationType = TWEEN.Interpolation.Linear,
-        easingFunction = TWEEN.Easing.Quadratic.Out;
-    let carGoingRight = false,
-        carGoingLeft = false,
-        carGoingUp = false,
-        carGoingDown = false,
-        carGoingStraight = false,
-        noRotation = null,
-        rotatetoRight = null,
-        rotatetoLeft = null,
-        rotateUp = null,
-        rotateDown = null
+        easingFunction = TWEEN.Easing.Quadratic.InOut;
+    let carMoving = null
     init()
     render()
 
@@ -82,6 +73,7 @@ if (WEBGL.isWebGLAvailable()) {
             'static/models/car/scene.gltf',
             // called when the resource is loaded
             function(car) {
+                mainShip = car.scene
 
                 console.log(car)
                 car.animations; // Array<THREE.AnimationClip>
@@ -93,7 +85,6 @@ if (WEBGL.isWebGLAvailable()) {
                 car.scene.scale.set(0.05, 0.05, 0.05)
                 car.scene.rotation.y += 3.1416
                 console.log(car.scene)
-                mainShip = car.scene
                 scene.add(mainShip);
 
             },
@@ -128,42 +119,9 @@ if (WEBGL.isWebGLAvailable()) {
         console.log("Cursor at: " + mouse.x + ", " + mouse.y)
             //z rotations +- 0.5
         if (mainShip) {
-            //HORIZONTAL MOVEMENT
-            if (mouse.x > -0.1 && mouse.x < 0.1 && mouse.y > -0.1 && mouse.y < 0.1) {
-                carGoingStraight = true
-                carGoingUp = false
-                carGoingDown = false
-                carGoingLeft = false
-                carGoingRight = false
-            }
-            if (mouse.x > 0.1) {
-                carGoingRight = true
-                    //console.log("Car going right")
-            } else if (mouse.x < -0.1) {
-                carGoingLeft = true
-                carGoingRight = false
-                    //console.log("Car going left")
 
-            } else {
-                carGoingRight = false
-                carGoingLeft = false
-            }
-
-            //VERTICAL MOVEMENT
-
-            if (mouse.y > 0.25) {
-                carGoingUp = true
-                carGoingDown = false
-
-                //console.log("Car going up")
-            } else if (mouse.y < -0.25) {
-                carGoingDown = true
-                carGoingUp = false
-                console.log("Car going down")
-
-            }
             //mainShip.rotation.z = -0.5
-            mainShip.position.set(-mouse.x * 50, mouse.y * 25, 0)
+            mainShip.position.set(-mouse.x * 60, mouse.y * 35, 0)
 
             //carGoingRight = false
             cursorX = mouse.x
@@ -187,13 +145,15 @@ if (WEBGL.isWebGLAvailable()) {
 
         //TWEEN Animations
         renderer.render(scene, camera)
-
-        if (mainShip) {
-            let carMoving =
-                new TWEEN.Tween(mainShip.rotation).to({ x: -cursorY, z: -cursorX }, 0.1)
-                .interpolation(interpolationType)
-                .easing(easingFunction)
-                .start();
+        if (mainShip && cursorY && cursorX) {
+            console.log(mainShip.rotation)
+            mainShip.rotation.set(-cursorY * 0.8, 3.1415, -cursorX)
+                /*
+                carMoving =
+                    new TWEEN.Tween(mainShip.rotation).to({ x: -cursorY, z: -cursorX }, 0.001)
+                    .interpolation(interpolationType)
+                    .easing(easingFunction)
+                    .start(); */
         }
 
         controls.update();
