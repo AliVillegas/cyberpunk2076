@@ -9,6 +9,7 @@ import * as TWEEN from 'three-tween'
 import { WEBGL } from './webgl'
 import './modal'
 import { Vector3 } from 'three'
+//CHECKING IF USER IS ON A SMARTPHONE
 var isMobile = {
     Android: function() {
         return navigator.userAgent.match(/Android/i);
@@ -29,14 +30,18 @@ var isMobile = {
         return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
     }
 };
-if (isMobile.any()) {
+if (isMobile.Android() || isMobile.iOS()) {
     var mobileMessage = document.getElementById("mobileMessage");
     var game = document.getElementById("game");
     game.style.display = "none";
-
     mobileMessage.style.display = "block";
+    var content = 'some content';
+    document.getElementsByTagName('body')[0].innerHTML = "";
+} else {
+    var mobileMessage = document.getElementById("mobileMessage");
+    mobileMessage.style.display = "none";
 
-};
+}
 
 if (WEBGL.isWebGLAvailable()) {
     var camera, scene, renderer
