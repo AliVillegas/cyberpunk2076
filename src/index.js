@@ -30,16 +30,13 @@ var isMobile = {
         return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
     }
 };
-if (isMobile.Android() || isMobile.iOS()) {
+if (isMobile.any()) {
     var mobileMessage = document.getElementById("mobileMessage");
-    var game = document.getElementById("game");
-    game.style.display = "none";
     mobileMessage.style.display = "block";
     var content = 'some content';
     document.getElementsByTagName('body')[0].innerHTML = "";
 } else {
-    var mobileMessage = document.getElementById("mobileMessage");
-    mobileMessage.style.display = "none";
+
     var game = document.getElementById("game");
     game.style.display = "block";
 }
