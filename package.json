@@ -13,7 +13,9 @@
   "license": "ISC",
   "dependencies": {
     "three": "^0.115.0",
-    "three-orbitcontrols": "^2.110.3"
+    "three-fbx-loader": "^1.0.3",
+    "three-orbitcontrols": "^2.110.3",
+    "three-tween": "^1.0.0"
   },
   "devDependencies": {
     "prettier": "^2.0.4",

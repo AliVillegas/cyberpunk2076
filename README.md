@@ -41,3 +41,9 @@ The code can be formated with prettier:
 ```bash
 npm run format
 ```
+
+## Models 
+
+Nissan by Daniel Zhabotinsky at https://sketchfab.com/3d-models/fida-sanremo-low-poly-model-b2261c471645417a8b7e5882d541c248
+
+Car by respektytreal https://sketchfab.com/3d-models/low-poly-car-27aa13c2bbd446d2bce15375c69b5792
