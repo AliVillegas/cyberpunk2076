@@ -188,62 +188,9 @@ if (WEBGL.isWebGLAvailable()) {
         //TWEEN Animations
         renderer.render(scene, camera)
 
-        if (carGoingRight) {
-            if (rotatetoLeft) {
-                rotatetoLeft.stop()
-            }
-            rotatetoRight =
-                new TWEEN.Tween(mainShip.rotation).to({ z: -cursorX }, 0.01)
-                .interpolation(interpolationType)
-                .easing(easingFunction)
-                .start();
-        } else if (carGoingLeft) {
-            if (rotatetoRight) {
-                rotatetoRight.stop()
-            }
-            rotatetoLeft =
-                new TWEEN.Tween(mainShip.rotation).to({ z: -cursorX }, 0.01)
-                .interpolation(interpolationType)
-                .easing(easingFunction)
-                .start();
-        }
-
-        //VERTICAL ANIMATIONS
-        if (carGoingUp) {
-            if (rotateDown) {
-                rotateDown.stop()
-            }
-            rotateUp =
-                new TWEEN.Tween(mainShip.rotation).to({ x: -cursorY }, 0.01)
-                .interpolation(interpolationType)
-                .easing(easingFunction)
-                .start();
-        } else if (carGoingDown) {
-            if (rotateUp) {
-                rotateUp.stop()
-            }
-            rotateDown =
-                new TWEEN.Tween(mainShip.rotation).to({ x: -cursorY }, 0.01)
-                .interpolation(interpolationType)
-                .easing(easingFunction)
-                .start();
-        }
-        if (carGoingDown == false && carGoingLeft == false && carGoingRight == false && carGoingUp == false && carGoingStraight) {
-            if (rotateUp) {
-                rotateUp.stop()
-            }
-            if (rotateDown) {
-                rotateDown.stop()
-            }
-            if (rotatetoRight) {
-                rotatetoRight.stop()
-            }
-            if (rotatetoLeft) {
-                rotatetoLeft.stop()
-            }
-
-            noRotation =
-                new TWEEN.Tween(mainShip.rotation).to({ x: 0, z: 0 }, 1.5)
+        if (mainShip) {
+            let carMoving =
+                new TWEEN.Tween(mainShip.rotation).to({ x: -cursorY, z: -cursorX }, 0.1)
                 .interpolation(interpolationType)
                 .easing(easingFunction)
                 .start();
