@@ -6,6 +6,10 @@ body {
     font-weight: normal;
 }
 
+.initiallyHidden {
+    display: none;
+}
+
 canvas {
     display: block;
 }
