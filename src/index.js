@@ -9,6 +9,34 @@ import * as TWEEN from 'three-tween'
 import { WEBGL } from './webgl'
 import './modal'
 import { Vector3 } from 'three'
+var isMobile = {
+    Android: function() {
+        return navigator.userAgent.match(/Android/i);
+    },
+    BlackBerry: function() {
+        return navigator.userAgent.match(/BlackBerry/i);
+    },
+    iOS: function() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+    },
+    Opera: function() {
+        return navigator.userAgent.match(/Opera Mini/i);
+    },
+    Windows: function() {
+        return navigator.userAgent.match(/IEMobile/i) || navigator.userAgent.match(/WPDesktop/i);
+    },
+    any: function() {
+        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+    }
+};
+if (isMobile.any()) {
+    var mobileMessage = document.getElementById("mobileMessage");
+    var game = document.getElementById("game");
+    game.style.display = "none";
+
+    mobileMessage.style.display = "block";
+
+};
 
 if (WEBGL.isWebGLAvailable()) {
     var camera, scene, renderer
