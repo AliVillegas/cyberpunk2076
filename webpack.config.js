@@ -8,8 +8,8 @@ module.exports = {
     filename: 'bundle.js',
   },
   performance: {
-    maxEntrypointSize: 1024000,
-    maxAssetSize: 1024000
+    maxEntrypointSize: 100024000,
+    maxAssetSize: 100024000
   },
   devServer: {
     publicPath: '/public/',
