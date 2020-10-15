@@ -51,7 +51,12 @@ if (WEBGL.isWebGLAvailable()) {
     var mouse;
     var gltfLoader;
 
-    //TWEEN 
+    //CAR
+    const baseScale = 0.05
+        //OBSTACLES
+    let spwanItem = false
+    let obstacles = []
+        //TWEEN 
     let interpolationType = TWEEN.Interpolation.Linear,
         easingFunction = TWEEN.Easing.Quadratic.InOut;
     let carMoving = null
@@ -108,16 +113,16 @@ if (WEBGL.isWebGLAvailable()) {
             function(car) {
                 mainShip = car.scene
 
-                console.log(car)
+                //console.log(car)
                 car.animations; // Array<THREE.AnimationClip>
                 car.scene; // THREE.Group
                 car.scenes; // Array<THREE.Group>
                 car.cameras; // Array<THREE.Camera>
                 car.asset; // Object
                 //car.scene.material.color.set("#FF")
-                car.scene.scale.set(0.05, 0.05, 0.05)
+                car.scene.scale.set(baseScale, baseScale, baseScale)
                 car.scene.rotation.y += 3.1416
-                console.log(car.scene)
+                    //console.log(car.scene)
                 scene.add(mainShip);
 
             },
@@ -134,7 +139,7 @@ if (WEBGL.isWebGLAvailable()) {
 
             }
         );
-
+        doSomethingAfterXseconds(3)
 
         // listeners
         window.addEventListener('resize', onWindowResize, false)
@@ -149,8 +154,8 @@ if (WEBGL.isWebGLAvailable()) {
         mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
         mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
         raycaster.setFromCamera(mouse, camera);
-        console.log("Cursor at: " + mouse.x + ", " + mouse.y)
-            //z rotations +- 0.5
+        //console.log("Cursor at: " + mouse.x + ", " + mouse.y)
+        //z rotations +- 0.5
         if (mainShip) {
 
             //mainShip.rotation.z = -0.5
@@ -161,6 +166,61 @@ if (WEBGL.isWebGLAvailable()) {
             cursorY = mouse.y
         }
 
+    }
+
+    function spawnIncomingCar() {
+        console.log("Spawning incoming Car")
+        gltfLoader.load(
+            // resource URL
+            'static/models/car/scene.gltf',
+            // called when the resource is loaded
+            function(car) {
+                car.scene.scale.set(baseScale * 0.05, baseScale * 0.05, baseScale * 0.05)
+                spawnObstacleAtDistance(car.scene)
+            },
+            // called while loading is progressing
+            function(xhr) {
+
+                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+
+            },
+            // called when loading has errors
+            function(error) {
+
+                console.log('An error happened');
+
+            }
+        );
+    }
+
+    function doSomethingAfterXseconds(s) {
+        setTimeout(
+            function() {
+                console.log("Doing something after x time")
+                var geometry = new THREE.BoxGeometry(1, 1, 1);
+                var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+                var cube = new THREE.Mesh(geometry, material);
+                spawnIncomingCar()
+                doSomethingAfterXseconds(3)
+            }, s * 1000);
+
+    }
+
+    function spawnObstacleAtDistance(threeDObj) {
+        scene.add(threeDObj);
+        let obstacle = {
+            object3d: threeDObj,
+            animateMovement: true,
+            animateRotation: true,
+            displacementAnimation: null,
+            animationSpeed: randomIntBetweenXY(1, 5) //seconds
+        }
+        obstacles.push(obstacle)
+
+    }
+
+    function randomIntBetweenXY(min, max) {
+        return Math.floor(Math.random() * max) + min
     }
 
     function onWindowResize() {
@@ -176,10 +236,31 @@ if (WEBGL.isWebGLAvailable()) {
         requestAnimationFrame(render);
         //console.log(cube.position)
 
+
+        //OBSTACLES Animations
+        if (obstacles.length > 0 && mainShip) {
+
+            console.log(obstacles[0].object3d.position)
+            obstacles.forEach(obs => {
+                if (obs.animateMovement) {
+                    obs.displacementAnimation = new TWEEN.Tween(obs.object3d.position).to({
+                        x: camera.position.x - Math.random() * randomIntBetweenXY(-5, 5),
+                        y: camera.position.y - Math.random() * randomIntBetweenXY(-5, 5),
+                        z: camera.position.z
+                    }, 1000 * obs.animationSpeed).interpolation(interpolationType).easing(easingFunction).start().onComplete(function() {
+                        obs.geometry.dispose();
+                        obs.material.dispose();
+                        scene.remove(obs);
+                        // NEED TO REMOVE ARRAY
+                    });
+                }
+                obs.animateMovement = false
+            });
+        }
         //TWEEN Animations
         renderer.render(scene, camera)
         if (mainShip && cursorY && cursorX) {
-            console.log(mainShip.rotation)
+            //console.log(mainShip.rotation)
             mainShip.rotation.set(-cursorY * 0.8, 3.1415, -cursorX)
                 /*
                 carMoving =
