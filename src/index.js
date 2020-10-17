@@ -50,9 +50,10 @@ if (WEBGL.isWebGLAvailable()) {
     var mainShip;
     var mouse;
     var gltfLoader;
-
-    //CAR
-    const baseScale = 0.05
+    let mainShipColor = 0xffd300
+    let mainShipColorLights = 0x5d1de7
+        //CAR
+    const baseScale = 0.05 * 0.05
         //OBSTACLES
     let spwanItem = false
     let obstacles = []
@@ -112,7 +113,20 @@ if (WEBGL.isWebGLAvailable()) {
             // called when the resource is loaded
             function(car) {
                 mainShip = car.scene
+                car.scene.traverse((o) => {
+                    if (o.isMesh) {
+                        console.log(o.name)
+                        if (o.name === "Low_Poly_Car_Mat1_0") {
+                            o.material.emissive = new THREE.Color(mainShipColor)
+                        }
+                        //material.emissive = new THREE.Color(mainShipColor);
 
+                        if (o.name === "Rear_Bumper_Mat8_0" || o.name === "Emergency_Light_Mat5_0") {
+                            o.material.emissive = new THREE.Color(mainShipColorLights)
+                        }
+
+                    }
+                });
                 //console.log(car)
                 car.animations; // Array<THREE.AnimationClip>
                 car.scene; // THREE.Group
@@ -122,6 +136,7 @@ if (WEBGL.isWebGLAvailable()) {
                 //car.scene.material.color.set("#FF")
                 car.scene.scale.set(baseScale, baseScale, baseScale)
                 car.scene.rotation.y += 3.1416
+                car.scene.position.z = -95
                     //console.log(car.scene)
                 scene.add(mainShip);
 
@@ -159,7 +174,7 @@ if (WEBGL.isWebGLAvailable()) {
         if (mainShip) {
 
             //mainShip.rotation.z = -0.5
-            mainShip.position.set(-mouse.x * 60, mouse.y * 35, 0)
+            mainShip.position.set(-mouse.x * 3, mouse.y * 2, -95)
 
             //carGoingRight = false
             cursorX = mouse.x
@@ -175,7 +190,14 @@ if (WEBGL.isWebGLAvailable()) {
             'static/models/car/scene.gltf',
             // called when the resource is loaded
             function(car) {
-                car.scene.scale.set(baseScale * 0.05, baseScale * 0.05, baseScale * 0.05)
+                car.scene.scale.set(baseScale, baseScale, baseScale)
+                car.scene.traverse((o) => {
+                    if (o.isMesh) {
+
+                        o.material.emissive = new THREE.Color(Math.random() * 0xffffff);
+                    }
+                });
+                console.log(car)
                 spawnObstacleAtDistance(car.scene)
             },
             // called while loading is progressing
@@ -240,17 +262,17 @@ if (WEBGL.isWebGLAvailable()) {
         //OBSTACLES Animations
         if (obstacles.length > 0 && mainShip) {
 
-            console.log(obstacles[0].object3d.position)
+            //console.log(obstacles[0].object3d.position)
             obstacles.forEach(obs => {
                 if (obs.animateMovement) {
                     obs.displacementAnimation = new TWEEN.Tween(obs.object3d.position).to({
-                        x: camera.position.x - Math.random() * randomIntBetweenXY(-5, 5),
-                        y: camera.position.y - Math.random() * randomIntBetweenXY(-5, 5),
+                        x: camera.position.x - Math.random() * randomIntBetweenXY(-2, 2),
+                        y: camera.position.y + Math.random() * randomIntBetweenXY(-2, -1),
                         z: camera.position.z
                     }, 1000 * obs.animationSpeed).interpolation(interpolationType).easing(easingFunction).start().onComplete(function() {
-                        obs.geometry.dispose();
-                        obs.material.dispose();
-                        scene.remove(obs);
+                        /*obs.object3d.geometry.dispose();
+                        obs.object3d.material.dispose();*/
+                        scene.remove(obs.object3d);
                         // NEED TO REMOVE ARRAY
                     });
                 }
