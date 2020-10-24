@@ -12,7 +12,7 @@ import { Vector3 } from 'three'
 let d = Date(); 
 let version = d.toString()  
 console.log('Version: ' + version)
-window.isMobile = function () {
+function isMobile () {
   let check = false
   ;(function (a) {
     if (
@@ -32,14 +32,17 @@ if (isMobile()) {
   console.log('Is on Mobile')
   var mobileMessage = document.getElementById('mobileMessage')
   mobileMessage.style.display = 'block'
-  var content = 'some content'
-  document.getElementsByTagName('body')[0].innerHTML = ''
+  let canvas = document.getElementById('canvas') 
+  const context = canvas.getContext('2d');
+  
+context.clearRect(0, 0, canvas.width, canvas.height);
 } else {
   console.log('Is on Desktop')
   var game = document.getElementById('game')
   game.style.display = 'block'
 }
 
+//THREEJS
 if (WEBGL.isWebGLAvailable()) {
   var camera, scene, renderer
   var controls
@@ -114,7 +117,7 @@ if (WEBGL.isWebGLAvailable()) {
         mainShip = car.scene
         car.scene.traverse((o) => {
           if (o.isMesh) {
-            console.log(o.name)
+            //console.log(o.name)
             if (o.name === 'Low_Poly_Car_Mat1_0') {
               o.material.emissive = new THREE.Color(mainShipColor)
             }
