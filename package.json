@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "jquery.finger": "^0.1.6",
     "moment": "^2.29.1",
     "three": "^0.115.0",
     "three-fbx-loader": "^1.0.3",

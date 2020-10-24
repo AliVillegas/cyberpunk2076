@@ -1,3 +1,11 @@
+
+## To run
+install nodejs
+
+run the following at /cyberpunk2076/:
+npm install
+npm run
+
 ## Deployment
 
 Bundle your code, and push it in your repo:

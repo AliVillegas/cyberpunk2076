@@ -30,12 +30,14 @@ function isMobile() {
 
 if (isMobile()) {
 	console.log('Is on Mobile')
+	/*
 	var mobileMessage = document.getElementById('mobileMessage')
 	mobileMessage.style.display = 'block'
 	let canvas = document.getElementById('canvas')
 	const context = canvas.getContext('2d');
 
 	context.clearRect(0, 0, canvas.width, canvas.height);
+	*/
 } else {
 	console.log('Is on Desktop')
 	var game = document.getElementById('game')
@@ -43,12 +45,13 @@ if (isMobile()) {
 }
 
 //THREEJS
+var cursorX
+var cursorY
 if (WEBGL.isWebGLAvailable()) {
 	var camera, scene, renderer
 	var controls
 	var objects = []
-	var cursorX
-	var cursorY
+
 	var mainShip
 	var mouse
 	var gltfLoader
@@ -95,7 +98,7 @@ if (WEBGL.isWebGLAvailable()) {
 		renderer = new THREE.WebGLRenderer({ antialias: true })
 
 		//controls
-		controls = new OrbitControls(camera, renderer.domElement)
+		//controls = new OrbitControls(camera, renderer.domElement)
 
 		renderer.setPixelRatio(window.devicePixelRatio)
 		renderer.setSize(window.innerWidth, window.innerHeight)
@@ -159,6 +162,9 @@ if (WEBGL.isWebGLAvailable()) {
 
 		// listeners
 		window.addEventListener('resize', onWindowResize, false)
+		document.body.appendChild(renderer.domElement);
+		document.addEventListener("touchmove", handleMove, false);
+
 	}
 
 	function createGlowingBox() { }
@@ -168,7 +174,7 @@ if (WEBGL.isWebGLAvailable()) {
 		mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1
 		mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1
 		raycaster.setFromCamera(mouse, camera)
-		//console.log("Cursor at: " + mouse.x + ", " + mouse.y)
+		console.log("Cursor at: " + mouse.x + ", " + mouse.y)
 		//z rotations +- 0.5
 		if (mainShip) {
 			//mainShip.rotation.z = -0.5
@@ -222,10 +228,10 @@ if (WEBGL.isWebGLAvailable()) {
 	}
 	function increaseSpawnRateEveryXSeconds(s) {
 		setTimeout(function () {
-			if(everyXSecondsCounter < 2){
+			if (everyXSecondsCounter < 2) {
 				spawnRate = 0.05
 			}
-			if(everyXSecondsCounter < 0.1){
+			if (everyXSecondsCounter < 0.1) {
 				spawnRate = 0
 			}
 			if (everyXSecondsCounter - spawnRate < 0) {
@@ -279,7 +285,7 @@ if (WEBGL.isWebGLAvailable()) {
 						.to(
 							{
 								x:
-									camera.position.x + Math.random() * randomIntBetweenXY(-8, 8) *posNeg,
+									camera.position.x + Math.random() * randomIntBetweenXY(-8, 8) * posNeg,
 								y:
 									camera.position.y +
 									Math.random() * randomIntBetweenXY(-4, 4) * posNeg,
@@ -292,7 +298,7 @@ if (WEBGL.isWebGLAvailable()) {
 						.start()
 						.onComplete(function () {
 							/*obs.object3d.geometry.dispose();
-									  obs.object3d.material.dispose();*/
+									obs.object3d.material.dispose();*/
 							scene.remove(obs.object3d)
 							// NEED TO REMOVE ARRAY
 						})
@@ -306,17 +312,33 @@ if (WEBGL.isWebGLAvailable()) {
 			//console.log(mainShip.rotation)
 			mainShip.rotation.set(-cursorY * 0.8, 3.1415, -cursorX)
 			/*
-					  carMoving =
-						  new TWEEN.Tween(mainShip.rotation).to({ x: -cursorY, z: -cursorX }, 0.001)
-						  .interpolation(interpolationType)
-						  .easing(easingFunction)
-						  .start(); */
+			carMoving =
+				new TWEEN.Tween(mainShip.rotation).to({ x: -cursorY, z: -cursorX }, 0.001)
+				.interpolation(interpolationType)
+				.easing(easingFunction)
+				.start(); */
 		}
 
-		controls.update()
+		//controls.update()
 		TWEEN.update()
 	}
 } else {
 	var warning = WEBGL.getWebGLErrorMessage()
 	document.body.appendChild(warning)
+}
+
+//MOBILE
+
+
+function handleMove(event) {
+	event.preventDefault();
+
+	mouse.x = (event.changedTouches[0].clientX / window.innerWidth) * 2 - 1;
+	mouse.y = -(event.changedTouches[0].clientY / window.innerHeight) * 2 + 1;
+	console.log("Tap at: " + mouse.x + ", " + mouse.y)
+
+	cursorX = mouse.x
+	cursorY = mouse.y
+	//raycaster.setFromCamera(mouse, camera);
+	//const intersects = raycaster.intersectObjects(yourObject3D);
 }
