@@ -46,7 +46,7 @@ if (isMobile()) {
 
 //THREEJS
 var cursorX
-var cursorY
+var cursorY	
 if (WEBGL.isWebGLAvailable()) {
 	var camera, scene, renderer
 	var controls
@@ -163,6 +163,7 @@ if (WEBGL.isWebGLAvailable()) {
 		// listeners
 		window.addEventListener('resize', onWindowResize, false)
 		document.body.appendChild(renderer.domElement);
+		document.addEventListener('touchend', onDocumentTouchEnd, false);
 		document.addEventListener("touchmove", handleMove, false);
 
 	}
@@ -310,7 +311,14 @@ if (WEBGL.isWebGLAvailable()) {
 		renderer.render(scene, camera)
 		if (mainShip && cursorY && cursorX) {
 			//console.log(mainShip.rotation)
-			mainShip.rotation.set(-cursorY * 0.8, 3.1415, -cursorX)
+			if(isMobile()){
+				mainShip.rotation.set(-cursorY * 0.8, 3.1415, -cursorX *0.5)
+				mainShip.position.set(-cursorX * 0.8, cursorY * 1.5, -95)
+			}
+			else{
+
+				mainShip.rotation.set(-cursorY * 0.8, 3.1415, -cursorX)
+			}
 			/*
 			carMoving =
 				new TWEEN.Tween(mainShip.rotation).to({ x: -cursorY, z: -cursorX }, 0.001)
@@ -329,10 +337,21 @@ if (WEBGL.isWebGLAvailable()) {
 
 //MOBILE
 
-
-function handleMove(event) {
+function onDocumentTouchEnd(event) {
 	event.preventDefault();
 
+	mouse.x = (event.changedTouches[0].clientX / window.innerWidth) * 2 - 1;
+	mouse.y = -(event.changedTouches[0].clientY / window.innerHeight) * 2 + 1;
+	console.log("Tap at: " + mouse.x + ", " + mouse.y)
+
+	cursorX = mouse.x
+	cursorY = mouse.y
+	//raycaster.setFromCamera(mouse, camera);
+	//const intersects = raycaster.intersectObjects(yourObject3D);
+}
+function handleMove(event) {
+	event.preventDefault();
+	
 	mouse.x = (event.changedTouches[0].clientX / window.innerWidth) * 2 - 1;
 	mouse.y = -(event.changedTouches[0].clientY / window.innerHeight) * 2 + 1;
 	console.log("Tap at: " + mouse.x + ", " + mouse.y)
