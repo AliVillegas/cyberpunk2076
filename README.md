@@ -1,3 +1,11 @@
+## Project Requirements
+
+-Collision with other cars
+-Trail animation for the cars
+-Objects moving in background 
+-Music
+-Game Menu
+-Mobile compatibility 
 
 ## To run
 install nodejs
