@@ -86,7 +86,7 @@ if (WEBGL.isWebGLAvailable()) {
 		scene.background = new THREE.Color(0xf0f0f0)
 		mouse = new THREE.Vector2()
 		const imgLoader = new THREE.TextureLoader();
-		imgLoader.load('/static/images/aes.jpg', function (texture) {
+		imgLoader.load('./static/images/aes.jpg', function (texture) {
 			scene.background = texture;
 		});
 		// lights
@@ -211,7 +211,7 @@ if (WEBGL.isWebGLAvailable()) {
 	// load a resource
 	loader.load(
 		// resource URL
-		'/static/Resonance.mp3',
+		'./static/sounds/Resonance.mp3',
 
 		// onLoad callback
 		function (audioBuffer) {
