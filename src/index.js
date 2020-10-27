@@ -46,7 +46,7 @@ if (isMobile()) {
 
 //THREEJS
 var cursorX
-var cursorY	
+var cursorY
 if (WEBGL.isWebGLAvailable()) {
 	var camera, scene, renderer
 	var controls
@@ -85,7 +85,11 @@ if (WEBGL.isWebGLAvailable()) {
 		scene = new THREE.Scene()
 		scene.background = new THREE.Color(0xf0f0f0)
 		mouse = new THREE.Vector2()
-
+		const imgLoader = new THREE.TextureLoader();
+		imgLoader.load('../static/images/aes.jpg', function (texture) {
+			scene.background = texture;
+		});
+		// lights
 		// lights
 
 		var ambientLight = new THREE.AmbientLight(0x606060, 1)
@@ -167,7 +171,67 @@ if (WEBGL.isWebGLAvailable()) {
 		document.addEventListener("touchmove", handleMove, false);
 
 	}
+	window.onload = function () {
+		const FizzyText = function () {
+			this.music = false
+		};
+		const gui = new dat.GUI();
+		const text = new FizzyText();
 
+		const musicController = gui.add(text, 'music', false);
+
+		musicController.onChange(function (value) {
+			if (value) {
+				backgroundMusic.play();
+			}
+			else {
+				backgroundMusic.pause();
+			}
+		});
+
+	};
+
+	// Music
+
+	// instantiate a listener
+	const audioListener = new THREE.AudioListener();
+
+	// add the listener to the camera
+	camera.add(audioListener);
+
+	// instantiate audio object
+	const backgroundMusic = new THREE.Audio(audioListener);
+
+	// add the audio object to the scene
+	scene.add(backgroundMusic);
+
+	// instantiate a loader
+	const loader = new THREE.AudioLoader();
+
+	// load a resource
+	loader.load(
+		// resource URL
+		'../static/Resonance.mp3',
+
+		// onLoad callback
+		function (audioBuffer) {
+			// set the audio object buffer to the loaded object
+			backgroundMusic.setBuffer(audioBuffer);
+			backgroundMusic.setLoop(true);
+			backgroundMusic.setVolume(0.5);
+			// play the audio
+			// backgroundMusic.play();
+		},
+
+		// onProgress callback
+		// function ( xhr ) {
+		//   console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+		// },
+
+		// onError callback
+		function (err) {
+		}
+	);
 	function createGlowingBox() { }
 	document.onmousemove = function (e) {
 		var raycaster = new THREE.Raycaster() // create once
@@ -311,11 +375,11 @@ if (WEBGL.isWebGLAvailable()) {
 		renderer.render(scene, camera)
 		if (mainShip && cursorY && cursorX) {
 			//console.log(mainShip.rotation)
-			if(isMobile()){
-				mainShip.rotation.set(-cursorY * 0.8, 3.1415, -cursorX *0.5)
+			if (isMobile()) {
+				mainShip.rotation.set(-cursorY * 0.8, 3.1415, -cursorX * 0.5)
 				mainShip.position.set(-cursorX * 0.8, cursorY * 1.5, -95)
 			}
-			else{
+			else {
 
 				mainShip.rotation.set(-cursorY * 0.8, 3.1415, -cursorX)
 			}
@@ -351,7 +415,7 @@ function onDocumentTouchEnd(event) {
 }
 function handleMove(event) {
 	event.preventDefault();
-	
+
 	mouse.x = (event.changedTouches[0].clientX / window.innerWidth) * 2 - 1;
 	mouse.y = -(event.changedTouches[0].clientY / window.innerHeight) * 2 + 1;
 	console.log("Tap at: " + mouse.x + ", " + mouse.y)

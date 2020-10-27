@@ -14,7 +14,7 @@ module.exports = {
   devServer: {
     publicPath: '/public/',
     compress: true,
-    port: 9000,
+    port: 9001,
     hot: true,
   },
 }
