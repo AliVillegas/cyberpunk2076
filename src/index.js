@@ -66,7 +66,7 @@ if (WEBGL.isWebGLAvailable()) {
 	let mainShipColor = 0xffd300
 	let mainShipColorLights = 0x5d1de7
 	let everyXSecondsCounter = 3
-	let spawnRate = 2
+	let spawnRate = 0.1
 	//CAR
 	const baseScale = 0.05 * 0.05
 	//OBSTACLES
@@ -272,7 +272,7 @@ if (WEBGL.isWebGLAvailable()) {
 						o.material.emissive = new THREE.Color(Math.random() * 0xffffff)
 					}
 				})
-				console.log(coin)
+				//console.log(coin)
 				spawnCoinAtDistance(coin.scene)
 			},
 			// called while loading is progressing
@@ -298,7 +298,7 @@ if (WEBGL.isWebGLAvailable()) {
 						o.material.emissive = new THREE.Color(Math.random() * 0xffffff)
 					}
 				})
-				console.log(car)
+				//console.log(car)
 				spawnObstacleAtDistance(car.scene)
 			},
 			// called while loading is progressing
@@ -396,7 +396,7 @@ if (WEBGL.isWebGLAvailable()) {
 		render()
 	}
 	function carHitObstacle(obstacleHit){
-		console.log(obstacleHit)
+		//console.log(obstacleHit)
 		if(obstacleHit.name === "car"){
 			console.log("HIT CAR")
 
