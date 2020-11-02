@@ -59,7 +59,7 @@ if (WEBGL.isWebGLAvailable()) {
 	var camera, scene, renderer
 	var controls
 	var objects = []
-
+	var coins = []
 	var mainShip
 	var mouse
 	var gltfLoader
@@ -259,6 +259,32 @@ if (WEBGL.isWebGLAvailable()) {
 		}
 	}
 
+	function spawnCoinRandom(){
+		gltfLoader.load(
+			// resource URL
+			'static/models/coin/scene.gltf',
+			// called when the resource is loaded
+			function (coin) {
+				coin.scene.scale.set(baseScale*3, baseScale*3, baseScale*3)
+				coin.scene.rotation.x += 3.1415/2
+				coin.scene.traverse((o) => {
+					if (o.isMesh) {
+						o.material.emissive = new THREE.Color(Math.random() * 0xffffff)
+					}
+				})
+				console.log(coin)
+				spawnCoinAtDistance(coin.scene)
+			},
+			// called while loading is progressing
+			function (xhr) {
+				//console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+			},
+			// called when loading has errors
+			function (error) {
+				//console.log('An error happened')
+			}
+		)
+	}
 	function spawnIncomingCar() {
 		//console.log('Spawning incoming Car')
 		gltfLoader.load(
@@ -296,7 +322,7 @@ if (WEBGL.isWebGLAvailable()) {
 			})
 			var cube = new THREE.Mesh(geometry, material)
 			spawnIncomingCar()
-
+			spawnCoinRandom()
 			increaseSpawnRateEveryXSeconds(5)
 			doSomethingAfterXseconds(everyXSecondsCounter)
 		}, s * 1000)
@@ -332,12 +358,31 @@ if (WEBGL.isWebGLAvailable()) {
 			displacementAnimation: null,
 			animationSpeed: 5 - everyXSecondsCounter,
 			hitbox: bbox,
-			helper: helper //seconds
+			helper: helper,
+			name: "car" //seconds
 		}
 		//console.log("Incoming car Speed: " + obstacle.animationSpeed)
 		obstacles.push(obstacle)
 	}
 
+	function spawnCoinAtDistance(threeDObj) {
+		var bbox = new THREE.Box3().setFromObject(threeDObj);
+		var helper = new THREE.BoxHelper(threeDObj);
+		//scene.add(helper)
+		scene.add(threeDObj)
+		let coin = {
+			object3d: threeDObj,
+			animateMovement: true,
+			animateRotation: true,
+			displacementAnimation: null,
+			animationSpeed: 5 - everyXSecondsCounter,
+			hitbox: bbox,
+			helper: helper,
+			name: "coin" //seconds
+		}
+		//console.log("Incoming car Speed: " + obstacle.animationSpeed)
+		coins.push(coin)
+	}
 	function randomIntBetweenXY(min, max) {
 		return Math.floor(Math.random() * max) + min
 	}
@@ -350,8 +395,17 @@ if (WEBGL.isWebGLAvailable()) {
 		renderer.setSize(window.innerWidth, window.innerHeight)
 		render()
 	}
-	function carHitObstacle(){
-		console.log(collisionWithCar)
+	function carHitObstacle(obstacleHit){
+		console.log(obstacleHit)
+		if(obstacleHit.name === "car"){
+			console.log("HIT CAR")
+
+			//die
+		}
+		else if(obstacleHit.name === "coin"){
+			//points update
+			console.log("HIT COIN")
+		}
 	}
 	function render() {
 		requestAnimationFrame(render)
@@ -360,6 +414,49 @@ if (WEBGL.isWebGLAvailable()) {
 		//OBSTACLES Animations
 		if (obstacles.length > 0 && mainShip) {
 			//console.log(obstacles[0].object3d.position)
+			coins.forEach((obs) => {
+				obs.object3d.rotation.z += 0.1
+				obs.hitbox = new THREE.Box3().setFromObject(obs.object3d);
+				obs.helper.update()
+				if (mainShip) {
+					let mainShipHitBox = new THREE.Box3().setFromObject(mainShip);
+					let mainShipHelper = new THREE.BoxHelper(mainShip, 0xffff00);
+					mainShipHelper.update()
+					//scene.add(mainShipHelper)
+					let collisionWithCar = mainShipHitBox.intersectsBox(obs.hitbox)
+					if (mainShipHitBox.intersectsBox(obs.hitbox)) {
+						carHitObstacle(obs)
+					}
+				}
+				if (obs.animateMovement) {
+					let posNeg = Math.random() < 0.5 ? -1 : 1;
+					obs.displacementAnimation = new TWEEN.Tween(obs.object3d.position)
+						.to({
+								x: camera.position.x + Math.random() * randomIntBetweenXY(-8, 8) * posNeg,
+								y: camera.position.y +
+									Math.random() * randomIntBetweenXY(-4, 4) * posNeg,
+								z: camera.position.z,
+							},
+							1000 * obs.animationSpeed
+						)
+						.interpolation(interpolationType)
+						.easing(easingFunction)
+						.start()
+						.onComplete(function () {
+							/*obs.object3d.geometry.dispose();
+									obs.object3d.material.dispose();*/
+							const index = obstacles.indexOf(obs);
+							if (index > -1) {
+								obstacles.splice(index, 1);
+							}
+							scene.remove(obs.object3d)
+							scene.remove(obs.hitbox)
+							scene.remove(obs.helper)
+							// NEED TO REMOVE ARRAY
+						})
+				}
+				obs.animateMovement = false
+			})
 			obstacles.forEach((obs) => {
 				obs.hitbox = new THREE.Box3().setFromObject(obs.object3d);
 				obs.helper.update()
@@ -370,7 +467,7 @@ if (WEBGL.isWebGLAvailable()) {
 					//scene.add(mainShipHelper)
 					let collisionWithCar = mainShipHitBox.intersectsBox(obs.hitbox)
 					if (mainShipHitBox.intersectsBox(obs.hitbox)) {
-						carHitObstacle()
+						carHitObstacle(obs)
 					}
 				}
 				if (obs.animateMovement) {
