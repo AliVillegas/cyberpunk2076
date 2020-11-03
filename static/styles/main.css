@@ -108,9 +108,19 @@ div{
 }
 #score{
     margin: auto;
+    top: 80px;
     position: absolute;
     z-index: 100;
     overflow: auto;
     color:#FF33F5;   
+    font-size: 70px;
+}
+
+#distanceTraveled{
+    margin: auto;
+    position: absolute;
+    z-index: 100;
+    overflow: auto;
+    color:#28f032;   
     font-size: 70px;
 }

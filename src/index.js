@@ -60,6 +60,7 @@ if (WEBGL.isWebGLAvailable()) {
 	var controls
 	var objects = []
 	var coins = []
+	var distanceTraveled = 0
 	var score = 0
 	var mainShip
 	var mouse
@@ -112,7 +113,7 @@ if (WEBGL.isWebGLAvailable()) {
 		})
 
 		//controls
-		controls = new OrbitControls(camera, renderer.domElement)
+		//controls = new OrbitControls(camera, renderer.domElement)
 
 		renderer.setPixelRatio(window.devicePixelRatio)
 		renderer.setSize(window.innerWidth, window.innerHeight)
@@ -349,13 +350,18 @@ if (WEBGL.isWebGLAvailable()) {
 		}, s * 1000)
 	}
 
-	function drawScore() {
-		context.font = "16px Arial";
-		context.fillStyle = "#0095DD";
-		let text = document.getElementById('score').textContent;
-		text+="Score:"+ score;
+	function drawScore(distanceTraveled,score) {
+		distanceTraveled = distanceTraveled/100
+		document.getElementById("distanceTraveled").textContent = "Km: "+ distanceTraveled;
+		document.getElementById("score").textContent = "Score: "+ score;
+		if(score < 0 ){
+			endGame()
+		}
 	}
+	function endGame(){
+		window.location.href = "end.html";
 
+	}
 	function spawnObstacleAtDistance(threeDObj) {
 		var bbox = new THREE.Box3().setFromObject(threeDObj);
 		var helper = new THREE.BoxHelper(threeDObj);
@@ -409,17 +415,20 @@ if (WEBGL.isWebGLAvailable()) {
 		//console.log(obstacleHit)
 		if(obstacleHit.name === "car"){
 			console.log("HIT CAR")
+			score -= 100
 
 			//die
 		}
 		else if(obstacleHit.name === "coin"){
+			score += 100
 			//points update
 			console.log("HIT COIN")
 		}
 	}
 	function render() {
 		requestAnimationFrame(render)
-		console.log(score);
+		distanceTraveled++
+		drawScore(distanceTraveled,score)
 		//console.log(cube.position)
 
 		//OBSTACLES Animations
@@ -531,7 +540,7 @@ if (WEBGL.isWebGLAvailable()) {
 				.start(); */
 		}
 
-		controls.update()
+		//controls.update()
 		TWEEN.update()
 	}
 } else {

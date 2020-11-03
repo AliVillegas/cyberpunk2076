@@ -2,45 +2,20 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
     <link rel="icon" href="static/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="static/styles/main.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="./node_modules/jquery.finger/dist/jquery.finger.js"></script>
-
+    <link rel="stylesheet" href="static/styles/intro.css">
     <title>Cyberpunk 2076</title>
 </head>
-
 <body>
-    <div>
-        <p id="score">SCORE:</p>
-        </div>
-    <!-- Information modal -->
-    <div id="mobileMessage" class="initiallyHidden">
-        Sorry, This site is not available on mobile devices!
-    </div>
-    <div id="game" class="initiallyHidden">
-
-    </div>
-    <a id="open-modal-btn" class="float">
-        <i class="icon-float material-icons">menu</i>
-    </a>
-    <div id="info-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal-btn">&times;</span> Ali Villegas  <br>
-            Diego Aguilar
-        </div>
-    </div>
-    <!-- End information modal -->
-    <script src="./static/libs/dat.gui.min.js"></script>
-
-    <script src="public/bundle.js"></script>
-    <script>
-
-
-    </script>
-
+    <h1>CyberPunk 2076</h1>
+    <button type="submit" onclick="startGame()" id="start">START</button>
 </body>
+<script>
+function startGame(){
+    window.location.href = "game.html";
 
+}
+</script>
 </html>
