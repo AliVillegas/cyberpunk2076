@@ -60,6 +60,7 @@ if (WEBGL.isWebGLAvailable()) {
 	var controls
 	var objects = []
 	var coins = []
+	var score = 0
 	var mainShip
 	var mouse
 	var gltfLoader
@@ -319,6 +320,7 @@ if (WEBGL.isWebGLAvailable()) {
 			var geometry = new THREE.BoxGeometry(1, 1, 1)
 			var material = new THREE.MeshBasicMaterial({
 				color: 0x00ff00
+
 			})
 			var cube = new THREE.Mesh(geometry, material)
 			spawnIncomingCar()
@@ -326,6 +328,7 @@ if (WEBGL.isWebGLAvailable()) {
 			increaseSpawnRateEveryXSeconds(5)
 			doSomethingAfterXseconds(everyXSecondsCounter)
 		}, s * 1000)
+
 	}
 
 	function increaseSpawnRateEveryXSeconds(s) {
@@ -344,6 +347,13 @@ if (WEBGL.isWebGLAvailable()) {
 			}
 
 		}, s * 1000)
+	}
+
+	function drawScore() {
+		context.font = "16px Arial";
+		context.fillStyle = "#0095DD";
+		let text = document.getElementById('score').textContent;
+		text+="Score:"+ score;
 	}
 
 	function spawnObstacleAtDistance(threeDObj) {
@@ -409,6 +419,7 @@ if (WEBGL.isWebGLAvailable()) {
 	}
 	function render() {
 		requestAnimationFrame(render)
+		console.log(score);
 		//console.log(cube.position)
 
 		//OBSTACLES Animations
