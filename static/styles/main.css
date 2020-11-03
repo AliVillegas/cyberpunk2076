@@ -102,3 +102,15 @@ p {
     width: 400px;
     margin: 5em auto 0;
 }
+div{
+    width: 102%;
+
+}
+#score{
+    margin: auto;
+    position: absolute;
+    z-index: 100;
+    overflow: auto;
+    color:#FF33F5;   
+    font-size: 70px;
+}

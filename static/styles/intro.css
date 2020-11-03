@@ -33,7 +33,7 @@ footer, header, hgroup, menu, nav, section, img {
 body {
 	line-height: 1;
     background-color: black;
-    background-image: url('/images/future.jpg');
+    background-image: url('/static/images/future.jpg');
     background-repeat: no-repeat;
     background-size: cover;
 }
