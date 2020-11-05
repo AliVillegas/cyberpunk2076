@@ -68,7 +68,7 @@ if (WEBGL.isWebGLAvailable()) {
     let mainShipColor = 0xffd300
     let mainShipColorLights = 0x5d1de7
     let everyXSecondsCounter = 3
-    let spawnRate = 0.1
+    let spawnRate = 0.5
         //CAR
     const baseScale = 0.05 * 0.05
         //OBSTACLES
@@ -114,7 +114,7 @@ if (WEBGL.isWebGLAvailable()) {
         })
 
         //controls
-        controls = new OrbitControls(camera, renderer.domElement)
+        //controls = new OrbitControls(camera, renderer.domElement)
 
         renderer.setPixelRatio(window.devicePixelRatio)
         renderer.setSize(window.innerWidth, window.innerHeight)
@@ -391,7 +391,7 @@ if (WEBGL.isWebGLAvailable()) {
             if (everyXSecondsCounter < 2) {
                 spawnRate = 0.05
             }
-            if (everyXSecondsCounter < 0.1) {
+            if (everyXSecondsCounter < 0.05) {
                 spawnRate = 0
             }
             if (everyXSecondsCounter - spawnRate < 0) {
@@ -628,7 +628,7 @@ if (WEBGL.isWebGLAvailable()) {
             	.start(); */
         }
 
-        controls.update()
+        //controls.update()
         TWEEN.update()
     }
 } else {
