@@ -14,6 +14,7 @@ import {
 } from './webgl'
 import './modal'
 import {
+    Group,
     Vector3
 } from 'three'
 //CHECKING IF USER IS ON A SMARTPHONE
@@ -114,7 +115,7 @@ if (WEBGL.isWebGLAvailable()) {
         })
 
         //controls
-        //controls = new OrbitControls(camera, renderer.domElement)
+        controls = new OrbitControls(camera, renderer.domElement)
 
         renderer.setPixelRatio(window.devicePixelRatio)
         renderer.setSize(window.innerWidth, window.innerHeight)
@@ -175,7 +176,7 @@ if (WEBGL.isWebGLAvailable()) {
         )
         increaseSpawnRateEveryXSeconds(5)
         doSomethingAfterXseconds(everyXSecondsCounter)
-
+        spawnCoinEveryXSeconds(15)
         // listeners
         window.addEventListener('resize', onWindowResize, false)
         document.body.appendChild(renderer.domElement);
@@ -342,6 +343,7 @@ if (WEBGL.isWebGLAvailable()) {
 
     function draw(gl, obj) 
     {
+
     gl.useProgram(shaderProgram);
 
    
@@ -354,7 +356,23 @@ if (WEBGL.isWebGLAvailable()) {
     gl.uniformMatrix4fv(shaderModelViewMatrixUniform, false, modelViewMatrix);
 
     // draw the object
-    gl.drawArrays(obj.primtype, 0, obj.nVerts);
+    gltfLoader.load(
+        // resource URL
+        'static/models/coin/scene.gltf',
+        // called when the resource is loaded
+        function(coin) {
+            gl.drawArrays(coin.primtype, 0, coin.nVerts);
+
+        },
+        // called while loading is progressing
+        function(xhr) {
+            //console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+        },
+        // called when loading has errors
+        function(error) {
+            //console.log('An error happened')
+        }
+    )
     }
 
     function createSquare(gl) 
@@ -371,7 +389,6 @@ if (WEBGL.isWebGLAvailable()) {
    
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
 
-    //let square = {buffer:vertexBuffer, vertSize:3, nVerts:4, primtype:gl.TRIANGLE_STRIP};
     return square;
     }
 
@@ -409,7 +426,69 @@ function createDiamond(gl)
     //let diamond = {buffer:vertexBuffer, vertSize:3, nVerts:4, primtype:gl.;
     return diamond;
     }
+    function coinTriangle(){
+        gltfLoader.load(
+            // resource URL
+            'static/models/coin/scene.gltf',
+            // called when the resource is loaded
+            function(coin1) {
+                coin1.scene.scale.set(baseScale * 3, baseScale * 3, baseScale * 3)
+                coin1.scene.rotation.x += 3.1415 / 2
+                coin1.scene.traverse((o) => {
+                        if (o.isMesh) {
+                            o.material.emissive = new THREE.Color(Math.random() * 0xffffff)
+                        }
+                    })
+                coin1.scene.position.set(-1,0,0)
+                gltfLoader.load(
+                    // resource URL
+                    'static/models/coin/scene.gltf',
+                    // called when the resource is loaded
+                    function(coin2) {
+                        coin2.scene.scale.set(baseScale * 3, baseScale * 3, baseScale * 3)
+                        coin2.scene.rotation.x += 3.1415 / 2
+                        coin2.scene.traverse((o) => {
+                                if (o.isMesh) {
+                                    o.material.emissive = new THREE.Color(Math.random() * 0xffffff)
+                                }
+                            })
+                        coin2.scene.position.set(1,0,0)
+                        gltfLoader.load(
+                            // resource URL
+                            'static/models/coin/scene.gltf',
+                            // called when the resource is loaded
+                            function(coin3) {
+                                coin3.scene.scale.set(baseScale * 3, baseScale * 3, baseScale * 3)
+                                coin3.scene.rotation.x += 3.1415 / 2
+                                coin3.scene.traverse((o) => {
+                                        if (o.isMesh) {
+                                            o.material.emissive = new THREE.Color(Math.random() * 0xffffff)
+                                        }
+                                    })
+                                coin3.scene.position.set(0,1,0)
 
+                                const triangleCoins = new THREE.Group();
+                                triangleCoins.add(coin1.scene)
+                                triangleCoins.add(coin2.scene)
+                                triangleCoins.add(coin3.scene)
+                                console.log(triangleCoins)
+                                //spawnCoinAtDistance(coin.scene)
+                                
+                                spawnCoinAtDistance(triangleCoins)
+
+                            },
+                            function(error) {
+                            }
+                        )
+                    },
+                    function(error) {
+                    }
+                )
+            },
+            function(error) {
+            }
+        )
+    }
     function spawnCoinFigureRandom() {
         gltfLoader.load(
             // resource URL
@@ -424,7 +503,8 @@ function createDiamond(gl)
                         }
                     })
                     //console.log(coin)
-                spawnCoinAtDistance(coin.scene)
+                //spawnCoinAtDistance(coin.scene)
+
             },
             // called while loading is progressing
             function(xhr) {
@@ -479,9 +559,18 @@ function createDiamond(gl)
                 //generateBuildings()
             spawnIncomingCar()
             spawnCoinRandom()
-            spawnCoinFigureRandom()
             increaseSpawnRateEveryXSeconds(5)
             doSomethingAfterXseconds(everyXSecondsCounter)
+        }, s * 1000)
+
+    }
+
+    function spawnCoinEveryXSeconds(s) {
+        //console.log("Spawning car every x seconds: " + everyXSecondsCounter)
+        setTimeout(function() {
+            spawnCoinFigureRandom()
+            spawnCoinEveryXSeconds(s)
+            coinTriangle(Math.random() * s)
         }, s * 1000)
 
     }
@@ -728,7 +817,7 @@ function createDiamond(gl)
             	.start(); */
         }
 
-        //controls.update()
+        controls.update()
         TWEEN.update()
     }
 } else {
