@@ -176,7 +176,7 @@ if (WEBGL.isWebGLAvailable()) {
         )
         increaseSpawnRateEveryXSeconds(5)
         doSomethingAfterXseconds(everyXSecondsCounter)
-        spawnCoinEveryXSeconds(15)
+        spawnCoinEveryXSeconds(10)
         // listeners
         window.addEventListener('resize', onWindowResize, false)
         document.body.appendChild(renderer.domElement);
