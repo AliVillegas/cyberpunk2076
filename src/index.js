@@ -340,6 +340,105 @@ if (WEBGL.isWebGLAvailable()) {
         buildings.push(buildingObj)
     }
 
+    function draw(gl, obj) 
+    {
+    gl.useProgram(shaderProgram);
+
+   
+    gl.bindBuffer(gl.ARRAY_BUFFER, obj.buffer);
+
+    gl.vertexAttribPointer(shaderVertexPositionAttribute, obj.vertSize, gl.FLOAT, false, 0, 0);
+
+  
+    gl.uniformMatrix4fv(shaderProjectionMatrixUniform, false, projectionMatrix);
+    gl.uniformMatrix4fv(shaderModelViewMatrixUniform, false, modelViewMatrix);
+
+    // draw the object
+    gl.drawArrays(obj.primtype, 0, obj.nVerts);
+    }
+
+    function createSquare(gl) 
+    {
+    let vertexBuffer;
+    vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    let verts = [
+        .5,  .5,  0.0,
+        -.5, .5,  0.0,
+        .5,  -.5,  0.0,
+        -.5, -.5,  0.0,
+    ];
+   
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
+
+    //let square = {buffer:vertexBuffer, vertSize:3, nVerts:4, primtype:gl.TRIANGLE_STRIP};
+    return square;
+    }
+
+    function createTriangle(gl)
+    {
+    let vertexBuffer;
+    vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    let verts = [
+        0.0, 0.5, 0.0,
+        .5, -.5,  0.0,
+        -.5, -.5,  0.0
+    ];
+
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
+
+    //let triangle = {buffer:vertexBuffer, vertSize:3, nVerts:3, primtype:gl.TRIANGLES};
+    return triangle;
+    }  
+
+function createDiamond(gl) 
+    {
+    let vertexBuffer;
+    vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    let verts = [
+        0,  .5,  0.0,
+        -.5, 0,  0.0,
+        0,  -.5,  0.0,
+        -.5, 0,  0.0,
+    ];
+    
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
+
+    //let diamond = {buffer:vertexBuffer, vertSize:3, nVerts:4, primtype:gl.;
+    return diamond;
+    }
+
+    function spawnCoinFigureRandom() {
+        gltfLoader.load(
+            // resource URL
+            'static/models/coin/scene.gltf',
+            // called when the resource is loaded
+            function(coin) {
+                coin.scene.scale.set(baseScale * 3, baseScale * 3, baseScale * 3)
+                coin.scene.rotation.x += 3.1415 / 2
+                coin.scene.traverse((o) => {
+                        if (o.isMesh) {
+                            o.material.emissive = new THREE.Color(Math.random() * 0xffffff)
+                        }
+                    })
+                    //console.log(coin)
+                spawnCoinAtDistance(coin.scene)
+            },
+            // called while loading is progressing
+            function(xhr) {
+                //console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+            },
+            // called when loading has errors
+            function(error) {
+                //console.log('An error happened')
+            }
+        )
+    }
+
+
+
     function spawnIncomingCar() {
         //console.log('Spawning incoming Car')
         gltfLoader.load(
@@ -380,6 +479,7 @@ if (WEBGL.isWebGLAvailable()) {
                 //generateBuildings()
             spawnIncomingCar()
             spawnCoinRandom()
+            spawnCoinFigureRandom()
             increaseSpawnRateEveryXSeconds(5)
             doSomethingAfterXseconds(everyXSecondsCounter)
         }, s * 1000)
