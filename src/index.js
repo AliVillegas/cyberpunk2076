@@ -20,10 +20,10 @@ import {
 //CHECKING IF USER IS ON A SMARTPHONE
 let d = Date();
 let version = d.toString()
-//console.log('Version: ' + version)
+    //console.log('Version: ' + version)
 function isMobile() {
     let check = false;
-    (function (a) {
+    (function(a) {
         if (
             /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(
                 a
@@ -57,8 +57,13 @@ if (isMobile()) {
 var cursorX
 var cursorY
 if (WEBGL.isWebGLAvailable()) {
+    let vid = document.getElementById("my_audio")
+    vid.volume = 0.05;
+    vid.play()
+
     var camera, scene, renderer
     var controls
+    let firstCity = true
     var objects = []
     var coins = []
     var distanceTraveled = 0
@@ -71,13 +76,13 @@ if (WEBGL.isWebGLAvailable()) {
     let mainShipColorLights = 0x5d1de7
     let everyXSecondsCounter = 3
     let spawnRate = 0.5
-    //CAR
+        //CAR
     const baseScale = 0.05 * 0.05
-    //OBSTACLES
+        //OBSTACLES
     let spwanItem = false
     let obstacles = []
     let buildings = []
-    //TWEEN
+        //TWEEN
     let interpolationType = TWEEN.Interpolation.Linear,
         easingFunction = TWEEN.Easing.Quadratic.InOut
     let carMoving = null
@@ -98,7 +103,7 @@ if (WEBGL.isWebGLAvailable()) {
         scene.background = new THREE.Color(0xf0f0f0)
         mouse = new THREE.Vector2()
         const imgLoader = new THREE.TextureLoader();
-        imgLoader.load('./static/images/aes.jpg', function (texture) {
+        imgLoader.load('./static/images/aes.jpg', function(texture) {
             scene.background = texture;
         });
         // lights
@@ -116,7 +121,7 @@ if (WEBGL.isWebGLAvailable()) {
         })
 
         //controls
-        controls = new OrbitControls(camera, renderer.domElement)
+        //controls = new OrbitControls(camera, renderer.domElement)
 
         renderer.setPixelRatio(window.devicePixelRatio)
         renderer.setSize(window.innerWidth, window.innerHeight)
@@ -127,7 +132,7 @@ if (WEBGL.isWebGLAvailable()) {
         // Instantiate a loader
         var loader = new GLTFLoader()
         gltfLoader = loader
-        // Optional: Provide a DRACOLoader instance to decode compressed mesh data
+            // Optional: Provide a DRACOLoader instance to decode compressed mesh data
         var dracoLoader = new DRACOLoader()
         dracoLoader.setDecoderPath('/examples/js/libs/draco/')
         loader.setDRACOLoader(dracoLoader)
@@ -137,57 +142,58 @@ if (WEBGL.isWebGLAvailable()) {
             // resource URL
             'static/models/car/scene.gltf',
             // called when the resource is loaded
-            function (car) {
+            function(car) {
                 mainShip = car.scene
                 car.scene.traverse((o) => {
-                    if (o.isMesh) {
-                        //console.log(o.name)
-                        if (o.name === 'Low_Poly_Car_Mat1_0') {
-                            o.material.emissive = new THREE.Color(mainShipColor)
+                        if (o.isMesh) {
+                            //console.log(o.name)
+                            if (o.name === 'Low_Poly_Car_Mat1_0') {
+                                o.material.emissive = new THREE.Color(mainShipColor)
+                            }
+                            if (
+                                o.name === 'Rear_Bumper_Mat8_0' ||
+                                o.name === 'Emergency_Light_Mat5_0'
+                            ) {
+                                o.material.emissive = new THREE.Color(mainShipColorLights)
+                            }
                         }
-                        if (
-                            o.name === 'Rear_Bumper_Mat8_0' ||
-                            o.name === 'Emergency_Light_Mat5_0'
-                        ) {
-                            o.material.emissive = new THREE.Color(mainShipColorLights)
-                        }
-                    }
-                })
-                //console.log(car)
+                    })
+                    //console.log(car)
                 car.animations // Array<THREE.AnimationClip>
                 car.scene // THREE.Group
                 car.scenes // Array<THREE.Group>
                 car.cameras // Array<THREE.Camera>
                 car.asset // Object
-                //car.scene.material.color.set("#FF")
+                    //car.scene.material.color.set("#FF")
                 car.scene.scale.set(baseScale, baseScale, baseScale)
                 car.scene.rotation.y += 3.1416
                 car.scene.position.z = -95
-                //console.log(car.scene)
+                    //console.log(car.scene)
                 scene.add(mainShip)
             },
             // called while loading is progressing
-            function (xhr) {
+            function(xhr) {
                 //console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
             },
             // called when loading has errors
-            function (error) {
+            function(error) {
                 //console.log('An error happened')
             }
         )
         increaseSpawnRateEveryXSeconds(5)
         spawnCityAfterXSeconds(0.1)
         doSomethingAfterXseconds(everyXSecondsCounter)
-        spawnCoinEveryXSeconds(10)
-        // listeners
+        spawnCoinEveryXSeconds(5)
+            // listeners
         window.addEventListener('resize', onWindowResize, false)
         document.body.appendChild(renderer.domElement);
         document.addEventListener('touchend', onDocumentTouchEnd, false);
         document.addEventListener("touchmove", handleMove, false);
 
     }
-    window.onload = function () {
-        const FizzyText = function () {
+    window.onload = function() {
+        /*
+        const FizzyText = function() {
             this.music = false
         };
         const gui = new dat.GUI();
@@ -195,13 +201,14 @@ if (WEBGL.isWebGLAvailable()) {
 
         const musicController = gui.add(text, 'music', false);
 
-        musicController.onChange(function (value) {
+        musicController.onChange(function(value) {
             if (value) {
                 backgroundMusic.play();
             } else {
                 backgroundMusic.pause();
             }
         });
+        */
 
     };
 
@@ -228,7 +235,7 @@ if (WEBGL.isWebGLAvailable()) {
         './static/sounds/Resonance.mp3',
 
         // onLoad callback
-        function (audioBuffer) {
+        function(audioBuffer) {
             // set the audio object buffer to the loaded object
             backgroundMusic.setBuffer(audioBuffer);
             backgroundMusic.setLoop(true);
@@ -243,18 +250,18 @@ if (WEBGL.isWebGLAvailable()) {
         // },
 
         // onError callback
-        function (err) {}
+        function(err) {}
     );
 
     function createGlowingBox() {}
-    document.onmousemove = function (e) {
+    document.onmousemove = function(e) {
         var raycaster = new THREE.Raycaster() // create once
-        // create once
+            // create once
         mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1
         mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1
         raycaster.setFromCamera(mouse, camera)
-        //console.log("Cursor at: " + mouse.x + ", " + mouse.y)
-        //z rotations +- 0.5
+            //console.log("Cursor at: " + mouse.x + ", " + mouse.y)
+            //z rotations +- 0.5
         if (mainShip) {
             //mainShip.rotation.z = -0.5
             mainShip.position.set(-mouse.x * 3, mouse.y * 2, -95)
@@ -270,23 +277,23 @@ if (WEBGL.isWebGLAvailable()) {
             // resource URL
             'static/models/coin/scene.gltf',
             // called when the resource is loaded
-            function (coin) {
-                coin.scene.scale.set(baseScale * 3, baseScale * 3, baseScale * 3)
+            function(coin) {
+                coin.scene.scale.set(baseScale * 5, baseScale * 5, baseScale * 5)
                 coin.scene.rotation.x += 3.1415 / 2
                 coin.scene.traverse((o) => {
-                    if (o.isMesh) {
-                        o.material.emissive = new THREE.Color(Math.random() * 0xffffff)
-                    }
-                })
-                //console.log(coin)
+                        if (o.isMesh) {
+                            o.material.emissive = new THREE.Color(Math.random() * 0xffffff)
+                        }
+                    })
+                    //console.log(coin)
                 spawnCoinAtDistance(coin.scene)
             },
             // called while loading is progressing
-            function (xhr) {
+            function(xhr) {
                 //console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
             },
             // called when loading has errors
-            function (error) {
+            function(error) {
                 //console.log('An error happened')
             }
         )
@@ -297,45 +304,64 @@ if (WEBGL.isWebGLAvailable()) {
             // resource URL
             'static/models/city2/scene.gltf',
             // called when the resource is loaded
-            function (city) {
+            function(city) {
                 console.log(city)
+                let index = 0
                 city.scene.traverse((o) => {
-                    if (o.isMesh) {
-                        o.material.emissive = new THREE.Color(Math.random() * 0xffffff)
-                    }
-                })
-                /*
-                let mat = city.scene.children[0].children[0].children[0].children[0].children[0].material
-                mat.color = new THREE.Color(Math.random() * 0x1acfdd)
-                mat.clipShadows = true      
-                //mat.wireframe = true
-                //mat.wireframeLinewidth = randomIntBetweenXY(10,30) 
-                mat.polygonOffsetFactor = Math.random()
-                mat.opacity = Math.random()
-                mat.alphaTest  = Math.random()
-                mat.reflectivity = Math.random()
-                console.log(mat)
-                */
-                currentCity = city.scene
+                        if (o.isMesh) {
+                            if (index == 3) {
+                                o.material.emissive = new THREE.Color(0x400080 * 0.2)
+                            } else {
+                                o.material.emissive = new THREE.Color(0x400080)
 
-                currentCity.scale.set(25, 7, 25)
+                            }
+                            index++
+                        }
+
+
+                    })
+                    /*
+                    let mat = city.scene.children[0].children[0].children[0].children[0].children[0].material
+                    mat.color = new THREE.Color(Math.random() * 0x1acfdd)
+                    mat.clipShadows = true      
+                    //mat.wireframe = true
+                    //mat.wireframeLinewidth = randomIntBetweenXY(10,30) 
+                    mat.polygonOffsetFactor = Math.random()
+                    mat.opacity = Math.random()
+                    mat.alphaTest  = Math.random()
+                    mat.reflectivity = Math.random()
+                    console.log(mat)
+                    */
+                currentCity = city.scene
+                let rndScale = 25
+                currentCity.scale.set(rndScale, 2.5, rndScale)
                 let pos = Math.random()
                 if (pos < 0.5) {
-                    
+
                     pos = -1
                 } else {
                     pos = 1
                 }
-                currentCity.position.set(0, Math.random() - 130,1460)
+                city.scene.position.set(0, Math.random() - 200, 1800)
+
+                /*
+                if (firstCity) {
+                    city.scene.position.set(0, Math.random() - 250, 2700)
+                    firstCity = false
+
+                } else {
+                    city.scene.position.set(0, Math.random() - 300, 3000)
+
+                }*/
                 currentCity.rotation.y += randomIntBetweenXY(0, 3.1415) * pos / randomIntBetweenXY(1, 20)
                 spawnBuildingAtDistance(city.scene)
             },
             // called while loading is progressing
-            function (xhr) {
+            function(xhr) {
                 //console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
             },
             // called when loading has errors
-            function (error) {
+            function(error) {
                 //console.log('An error happened')
             }
         )
@@ -348,7 +374,7 @@ if (WEBGL.isWebGLAvailable()) {
             'static/images/building1.jpg',
 
             // onLoad callback
-            function (texture) {
+            function(texture) {
                 // in this example we create the material when the texture is loaded
                 const material = new THREE.MeshBasicMaterial({
                     map: texture
@@ -370,7 +396,7 @@ if (WEBGL.isWebGLAvailable()) {
             undefined,
 
             // onError callback
-            function (err) {
+            function(err) {
                 console.error('An error happened.');
             }
         );
@@ -381,14 +407,14 @@ if (WEBGL.isWebGLAvailable()) {
         //scene.add(helper)
         scene.add(building)
         let buildingObj = {
-            object3d: building,
-            animateMovement: true,
-            animateRotation: true,
-            displacementAnimation: null,
-            animationSpeed: 18,
-            name: "building" //seconds
-        }
-        //console.log("Incoming car Speed: " + obstacle.animationSpeed)
+                object3d: building,
+                animateMovement: true,
+                animateRotation: true,
+                displacementAnimation: null,
+                animationSpeed: 25,
+                name: "building" //seconds
+            }
+            //console.log("Incoming car Speed: " + obstacle.animationSpeed)
         buildings.push(buildingObj)
     }
 
@@ -410,16 +436,16 @@ if (WEBGL.isWebGLAvailable()) {
             // resource URL
             'static/models/coin/scene.gltf',
             // called when the resource is loaded
-            function (coin) {
+            function(coin) {
                 gl.drawArrays(coin.primtype, 0, coin.nVerts);
 
             },
             // called while loading is progressing
-            function (xhr) {
+            function(xhr) {
                 //console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
             },
             // called when loading has errors
-            function (error) {
+            function(error) {
                 //console.log('An error happened')
             }
         )
@@ -430,7 +456,7 @@ if (WEBGL.isWebGLAvailable()) {
             // resource URL
             'static/models/coin/scene.gltf',
             // called when the resource is loaded
-            function (coin1) {
+            function(coin1) {
                 coin1.scene.scale.set(baseScale * 3, baseScale * 3, baseScale * 3)
                 coin1.scene.rotation.x += 3.1415 / 2
                 coin1.scene.traverse((o) => {
@@ -443,7 +469,7 @@ if (WEBGL.isWebGLAvailable()) {
                     // resource URL
                     'static/models/coin/scene.gltf',
                     // called when the resource is loaded
-                    function (coin2) {
+                    function(coin2) {
                         coin2.scene.scale.set(baseScale * 3, baseScale * 3, baseScale * 3)
                         coin2.scene.rotation.x += 3.1415 / 2
                         coin2.scene.traverse((o) => {
@@ -456,7 +482,7 @@ if (WEBGL.isWebGLAvailable()) {
                             // resource URL
                             'static/models/coin/scene.gltf',
                             // called when the resource is loaded
-                            function (coin3) {
+                            function(coin3) {
                                 coin3.scene.scale.set(baseScale * 3, baseScale * 3, baseScale * 3)
                                 coin3.scene.rotation.x += 3.1415 / 2
                                 coin3.scene.traverse((o) => {
@@ -471,18 +497,18 @@ if (WEBGL.isWebGLAvailable()) {
                                 triangleCoins.add(coin2.scene)
                                 triangleCoins.add(coin3.scene)
                                 console.log(triangleCoins)
-                                //spawnCoinAtDistance(coin.scene)
+                                    //spawnCoinAtDistance(coin.scene)
 
                                 spawnCoinAtDistance(triangleCoins)
 
                             },
-                            function (error) {}
+                            function(error) {}
                         )
                     },
-                    function (error) {}
+                    function(error) {}
                 )
             },
-            function (error) {}
+            function(error) {}
         )
     }
 
@@ -491,7 +517,7 @@ if (WEBGL.isWebGLAvailable()) {
             // resource URL
             'static/models/coin/scene.gltf',
             // called when the resource is loaded
-            function (coin1) {
+            function(coin1) {
                 coin1.scene.scale.set(baseScale * 3, baseScale * 3, baseScale * 3)
                 coin1.scene.rotation.x += 3.1415 / 2
                 coin1.scene.traverse((o) => {
@@ -499,12 +525,12 @@ if (WEBGL.isWebGLAvailable()) {
                         o.material.emissive = new THREE.Color(Math.random() * 0xffffff)
                     }
                 })
-                coin1.scene.position.set(-1, 0, 0)
+                coin1.scene.position.set(-0.5, 0, 0)
                 gltfLoader.load(
                     // resource URL
                     'static/models/coin/scene.gltf',
                     // called when the resource is loaded
-                    function (coin2) {
+                    function(coin2) {
                         coin2.scene.scale.set(baseScale * 3, baseScale * 3, baseScale * 3)
                         coin2.scene.rotation.x += 3.1415 / 2
                         coin2.scene.traverse((o) => {
@@ -512,12 +538,12 @@ if (WEBGL.isWebGLAvailable()) {
                                 o.material.emissive = new THREE.Color(Math.random() * 0xffffff)
                             }
                         })
-                        coin2.scene.position.set(1, 0, 0)
+                        coin2.scene.position.set(0.5, 0, 0)
                         gltfLoader.load(
                             // resource URL
                             'static/models/coin/scene.gltf',
                             // called when the resource is loaded
-                            function (coin3) {
+                            function(coin3) {
                                 coin3.scene.scale.set(baseScale * 3, baseScale * 3, baseScale * 3)
                                 coin3.scene.rotation.x += 3.1415 / 2
                                 coin3.scene.traverse((o) => {
@@ -525,12 +551,12 @@ if (WEBGL.isWebGLAvailable()) {
                                         o.material.emissive = new THREE.Color(Math.random() * 0xffffff)
                                     }
                                 })
-                                coin3.scene.position.set(1, 1, 0)
+                                coin3.scene.position.set(0.5, 0.5, 0)
                                 gltfLoader.load(
                                     // resource URL
                                     'static/models/coin/scene.gltf',
                                     // called when the resource is loaded
-                                    function (coin4) {
+                                    function(coin4) {
                                         coin4.scene.scale.set(baseScale * 3, baseScale * 3, baseScale * 3)
                                         coin4.scene.rotation.x += 3.1415 / 2
                                         coin4.scene.traverse((o) => {
@@ -538,7 +564,7 @@ if (WEBGL.isWebGLAvailable()) {
                                                 o.material.emissive = new THREE.Color(Math.random() * 0xffffff)
                                             }
                                         })
-                                        coin4.scene.position.set(-1, 1, 0)
+                                        coin4.scene.position.set(-0.5, 0.5, 0)
 
                                         const squareCoins = new THREE.Group();
                                         squareCoins.add(coin1.scene)
@@ -546,20 +572,20 @@ if (WEBGL.isWebGLAvailable()) {
                                         squareCoins.add(coin3.scene)
                                         squareCoins.add(coin4.scene)
                                         console.log(squareCoins)
-                                        //spawnCoinAtDistance(coin.scene)
+                                            //spawnCoinAtDistance(coin.scene)
 
                                         spawnCoinAtDistance(squareCoins)
                                     },
-                                    function (error) {}
+                                    function(error) {}
                                 )
                             },
-                            function (error) {}
+                            function(error) {}
                         )
                     },
-                    function (error) {}
+                    function(error) {}
                 )
             },
-            function (error) {}
+            function(error) {}
         )
     }
 
@@ -568,7 +594,7 @@ if (WEBGL.isWebGLAvailable()) {
             // resource URL
             'static/models/coin/scene.gltf',
             // called when the resource is loaded
-            function (coin1) {
+            function(coin1) {
                 coin1.scene.scale.set(baseScale * 3, baseScale * 3, baseScale * 3)
                 coin1.scene.rotation.x += 3.1415 / 2
                 coin1.scene.traverse((o) => {
@@ -581,7 +607,7 @@ if (WEBGL.isWebGLAvailable()) {
                     // resource URL
                     'static/models/coin/scene.gltf',
                     // called when the resource is loaded
-                    function (coin2) {
+                    function(coin2) {
                         coin2.scene.scale.set(baseScale * 3, baseScale * 3, baseScale * 3)
                         coin2.scene.rotation.x += 3.1415 / 2
                         coin2.scene.traverse((o) => {
@@ -594,7 +620,7 @@ if (WEBGL.isWebGLAvailable()) {
                             // resource URL
                             'static/models/coin/scene.gltf',
                             // called when the resource is loaded
-                            function (coin3) {
+                            function(coin3) {
                                 coin3.scene.scale.set(baseScale * 3, baseScale * 3, baseScale * 3)
                                 coin3.scene.rotation.x += 3.1415 / 2
                                 coin3.scene.traverse((o) => {
@@ -607,7 +633,7 @@ if (WEBGL.isWebGLAvailable()) {
                                     // resource URL
                                     'static/models/coin/scene.gltf',
                                     // called when the resource is loaded
-                                    function (coin4) {
+                                    function(coin4) {
                                         coin4.scene.scale.set(baseScale * 3, baseScale * 3, baseScale * 3)
                                         coin4.scene.rotation.x += 3.1415 / 2
                                         coin4.scene.traverse((o) => {
@@ -623,20 +649,20 @@ if (WEBGL.isWebGLAvailable()) {
                                         diamondCoins.add(coin3.scene)
                                         diamondCoins.add(coin4.scene)
                                         console.log(diamondCoins)
-                                        //spawnCoinAtDistance(coin.scene)
+                                            //spawnCoinAtDistance(coin.scene)
 
                                         spawnCoinAtDistance(diamondCoins)
                                     },
-                                    function (error) {}
+                                    function(error) {}
                                 )
                             },
-                            function (error) {}
+                            function(error) {}
                         )
                     },
-                    function (error) {}
+                    function(error) {}
                 )
             },
-            function (error) {}
+            function(error) {}
         )
     }
 
@@ -646,22 +672,22 @@ if (WEBGL.isWebGLAvailable()) {
             // resource URL
             'static/models/car/scene.gltf',
             // called when the resource is loaded
-            function (car) {
+            function(car) {
                 car.scene.scale.set(baseScale, baseScale, baseScale)
                 car.scene.traverse((o) => {
-                    if (o.isMesh) {
-                        o.material.emissive = new THREE.Color(Math.random() * 0xffffff)
-                    }
-                })
-                //console.log(car)
+                        if (o.isMesh) {
+                            o.material.emissive = new THREE.Color(Math.random() * 0xffffff)
+                        }
+                    })
+                    //console.log(car)
                 spawnObstacleAtDistance(car.scene)
             },
             // called while loading is progressing
-            function (xhr) {
+            function(xhr) {
                 //console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
             },
             // called when loading has errors
-            function (error) {
+            function(error) {
                 //console.log('An error happened')
             }
         )
@@ -669,7 +695,7 @@ if (WEBGL.isWebGLAvailable()) {
 
     function doSomethingAfterXseconds(s) {
         //console.log("Spawning car every x seconds: " + everyXSecondsCounter)
-        setTimeout(function () {
+        setTimeout(function() {
             //console.log('Doing something after x time')
             var geometry = new THREE.BoxGeometry(1, 1, 1)
             var material = new THREE.MeshBasicMaterial({
@@ -677,9 +703,8 @@ if (WEBGL.isWebGLAvailable()) {
 
             })
             var cube = new THREE.Mesh(geometry, material)
-            //generateBuildings()
+                //generateBuildings()
             spawnIncomingCar()
-            spawnCoinRandom()
             increaseSpawnRateEveryXSeconds(5)
             doSomethingAfterXseconds(everyXSecondsCounter)
         }, s * 1000)
@@ -689,31 +714,47 @@ if (WEBGL.isWebGLAvailable()) {
 
     function spawnCoinEveryXSeconds(s) {
         //console.log("Spawning car every x seconds: " + everyXSecondsCounter)
-        setTimeout(function () {
+        setTimeout(function() {
             //spawnCoinFigureRandom()
-            spawnCoinEveryXSeconds(s)
-            coinTriangle(Math.random())
+            spawnCoinEveryXSeconds(randomIntBetweenXY(1, 3))
+            spawnRandomFigure()
+
+            // coinTriangle()
             //coinSquare(Math.random() * 10)
             //coinDiamond(Math.random() * 15)
         }, s * 1000)
 
     }
 
+    function spawnRandomFigure() {
+        let figureNum = randomIntBetweenXY(1, 6)
+        console.log("NUMBER FIGURE" + figureNum)
+        if (figureNum == 1) {
+            coinTriangle()
+        } else if (figureNum == 2) {
+            coinDiamond()
+        } else if (figureNum == 3) {
+            coinSquare()
+        } else {
+            spawnCoinRandom()
+        }
+    }
+
     function spawnCityAfterXSeconds(s) {
         //console.log("Spawning car every x seconds: " + everyXSecondsCounter)
-        setTimeout(function () {
+        setTimeout(function() {
             //spawnCoinFigureRandom()
             generateCity()
-            //spawnCityAfterXSeconds(Math.random()*1.8)
-            spawnCityAfterXSeconds(7)
-            //coinSquare(Math.random() * 10)
-            //coinDiamond(Math.random() * 15)
+                //spawnCityAfterXSeconds(Math.random()*1.8)
+            spawnCityAfterXSeconds(10)
+                //coinSquare(Math.random() * 10)
+                //coinDiamond(Math.random() * 15)
         }, s * 1000)
 
     }
 
     function increaseSpawnRateEveryXSeconds(s) {
-        setTimeout(function () {
+        setTimeout(function() {
             if (everyXSecondsCounter < 2) {
                 spawnRate = 0.05
             }
@@ -750,16 +791,16 @@ if (WEBGL.isWebGLAvailable()) {
         //scene.add(helper)
         scene.add(threeDObj)
         let obstacle = {
-            object3d: threeDObj,
-            animateMovement: true,
-            animateRotation: true,
-            displacementAnimation: null,
-            animationSpeed: 5 - everyXSecondsCounter,
-            hitbox: bbox,
-            helper: helper,
-            name: "car" //seconds
-        }
-        //console.log("Incoming car Speed: " + obstacle.animationSpeed)
+                object3d: threeDObj,
+                animateMovement: true,
+                animateRotation: true,
+                displacementAnimation: null,
+                animationSpeed: 5 - everyXSecondsCounter,
+                hitbox: bbox,
+                helper: helper,
+                name: "car" //seconds
+            }
+            //console.log("Incoming car Speed: " + obstacle.animationSpeed)
         obstacles.push(obstacle)
     }
 
@@ -769,16 +810,16 @@ if (WEBGL.isWebGLAvailable()) {
         //scene.add(helper)
         scene.add(threeDObj)
         let coin = {
-            object3d: threeDObj,
-            animateMovement: true,
-            animateRotation: true,
-            displacementAnimation: null,
-            animationSpeed: 2,
-            hitbox: bbox,
-            helper: helper,
-            name: "coin" //seconds
-        }
-        //console.log("Incoming car Speed: " + obstacle.animationSpeed)
+                object3d: threeDObj,
+                animateMovement: true,
+                animateRotation: true,
+                displacementAnimation: null,
+                animationSpeed: 2,
+                hitbox: bbox,
+                helper: helper,
+                name: "coin" //seconds
+            }
+            //console.log("Incoming car Speed: " + obstacle.animationSpeed)
         coins.push(coin)
     }
 
@@ -804,7 +845,7 @@ if (WEBGL.isWebGLAvailable()) {
             //die
         } else if (obstacleHit.name === "coin") {
             score += 100
-            //points update
+                //points update
             console.log("HIT COIN")
         }
     }
@@ -813,8 +854,8 @@ if (WEBGL.isWebGLAvailable()) {
         requestAnimationFrame(render)
         distanceTraveled++
         drawScore(distanceTraveled, score)
-        //console.log(cube.position)
-        //OBSTACLES Animations
+            //console.log(cube.position)
+            //OBSTACLES Animations
         if (buildings.length > 0) {
             buildings.forEach((obs) => {
                 if (obs.animateMovement) {
@@ -822,15 +863,15 @@ if (WEBGL.isWebGLAvailable()) {
                     obs.displacementAnimation = new TWEEN.Tween(obs.object3d.position)
                         .to({
                                 x: camera.position.x - 10,
-                                y: camera.position.y - 20,
-                                z: camera.position.z - 8000,
+                                y: camera.position.y - 10,
+                                z: camera.position.z - 2500,
                             },
                             1000 * obs.animationSpeed
                         )
                         .interpolation(interpolationType)
                         .easing(easingFunction)
                         .start()
-                        .onComplete(function () {
+                        .onComplete(function() {
                             /*obs.object3d.geometry.dispose();
                             obs.object3d.material.dispose();*/
                             const index = obstacles.indexOf(obs);
@@ -838,7 +879,7 @@ if (WEBGL.isWebGLAvailable()) {
                                 buildings.splice(index, 1);
                             }
                             scene.remove(obs.object3d)
-                            // NEED TO REMOVE ARRAY
+                                // NEED TO REMOVE ARRAY
                         })
                 }
                 obs.animateMovement = false
@@ -854,7 +895,7 @@ if (WEBGL.isWebGLAvailable()) {
                     let mainShipHitBox = new THREE.Box3().setFromObject(mainShip);
                     let mainShipHelper = new THREE.BoxHelper(mainShip, 0xffff00);
                     mainShipHelper.update()
-                    //scene.add(mainShipHelper)
+                        //scene.add(mainShipHelper)
                     let collisionWithCar = mainShipHitBox.intersectsBox(obs.hitbox)
                     if (mainShipHitBox.intersectsBox(obs.hitbox)) {
                         carHitObstacle(obs)
@@ -874,7 +915,7 @@ if (WEBGL.isWebGLAvailable()) {
                         .interpolation(interpolationType)
                         .easing(easingFunction)
                         .start()
-                        .onComplete(function () {
+                        .onComplete(function() {
                             /*obs.object3d.geometry.dispose();
                             		obs.object3d.material.dispose();*/
                             const index = obstacles.indexOf(obs);
@@ -884,7 +925,7 @@ if (WEBGL.isWebGLAvailable()) {
                             scene.remove(obs.object3d)
                             scene.remove(obs.hitbox)
                             scene.remove(obs.helper)
-                            // NEED TO REMOVE ARRAY
+                                // NEED TO REMOVE ARRAY
                         })
                 }
                 obs.animateMovement = false
@@ -896,7 +937,7 @@ if (WEBGL.isWebGLAvailable()) {
                     let mainShipHitBox = new THREE.Box3().setFromObject(mainShip);
                     let mainShipHelper = new THREE.BoxHelper(mainShip, 0xffff00);
                     mainShipHelper.update()
-                    //scene.add(mainShipHelper)
+                        //scene.add(mainShipHelper)
                     let collisionWithCar = mainShipHitBox.intersectsBox(obs.hitbox)
                     if (mainShipHitBox.intersectsBox(obs.hitbox)) {
                         carHitObstacle(obs)
@@ -917,7 +958,7 @@ if (WEBGL.isWebGLAvailable()) {
                         .interpolation(interpolationType)
                         .easing(easingFunction)
                         .start()
-                        .onComplete(function () {
+                        .onComplete(function() {
                             /*obs.object3d.geometry.dispose();
                             		obs.object3d.material.dispose();*/
                             const index = obstacles.indexOf(obs);
@@ -927,7 +968,7 @@ if (WEBGL.isWebGLAvailable()) {
                             scene.remove(obs.object3d)
                             scene.remove(obs.hitbox)
                             scene.remove(obs.helper)
-                            // NEED TO REMOVE ARRAY
+                                // NEED TO REMOVE ARRAY
                         })
                 }
                 obs.animateMovement = false
@@ -952,7 +993,7 @@ if (WEBGL.isWebGLAvailable()) {
             	.start(); */
         }
 
-        controls.update()
+        // controls.update()
         TWEEN.update()
     }
 } else {
@@ -971,8 +1012,8 @@ function onDocumentTouchEnd(event) {
 
     cursorX = mouse.x
     cursorY = mouse.y
-    //raycaster.setFromCamera(mouse, camera);
-    //const intersects = raycaster.intersectObjects(yourObject3D);
+        //raycaster.setFromCamera(mouse, camera);
+        //const intersects = raycaster.intersectObjects(yourObject3D);
 }
 
 function handleMove(event) {
@@ -984,6 +1025,6 @@ function handleMove(event) {
 
     cursorX = mouse.x
     cursorY = mouse.y
-    //raycaster.setFromCamera(mouse, camera);
-    //const intersects = raycaster.intersectObjects(yourObject3D);
+        //raycaster.setFromCamera(mouse, camera);
+        //const intersects = raycaster.intersectObjects(yourObject3D);
 }
