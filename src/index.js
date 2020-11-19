@@ -307,12 +307,19 @@ if (WEBGL.isWebGLAvailable()) {
             function(city) {
                 console.log(city)
                 let index = 0
+                let rndColors = []
+                rndColors.push(0xFF4480)
+                rndColors.push(0xBB3456)
+                rndColors.push(0x400080)
+                let rndColor = randomIntBetweenXY(0,rndColors.length)
+
                 city.scene.traverse((o) => {
                         if (o.isMesh) {
                             if (index == 3) {
-                                o.material.emissive = new THREE.Color(0x400080 * 0.2)
+                                o.material.emissive = new THREE.Color(rndColors[rndColor]*0.2)
                             } else {
-                                o.material.emissive = new THREE.Color(0x400080)
+                                o.material.emissive = new THREE.Color(rndColors[rndColor])
+                                //o.material.emissive = new THREE.Color(0x400080)
 
                             }
                             index++
@@ -668,29 +675,85 @@ if (WEBGL.isWebGLAvailable()) {
 
     function spawnIncomingCar() {
         //console.log('Spawning incoming Car')
-        gltfLoader.load(
-            // resource URL
-            'static/models/car/scene.gltf',
-            // called when the resource is loaded
-            function(car) {
-                car.scene.scale.set(baseScale, baseScale, baseScale)
-                car.scene.traverse((o) => {
-                        if (o.isMesh) {
-                            o.material.emissive = new THREE.Color(Math.random() * 0xffffff)
-                        }
-                    })
-                    //console.log(car)
-                spawnObstacleAtDistance(car.scene)
-            },
-            // called while loading is progressing
-            function(xhr) {
-                //console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
-            },
-            // called when loading has errors
-            function(error) {
-                //console.log('An error happened')
-            }
-        )
+        let rndObs = Math.random()
+        console.log("RANDOM OBS", rndObs)
+        if(rndObs < 0.1){
+            gltfLoader.load(
+                // resource URL
+                'static/models/trailer/scene.gltf',
+                // called when the resource is loaded
+                function(car) {
+                    car.scene.scale.set(baseScale*1.5, baseScale*1.5, baseScale*1.5)
+                    car.scene.rotation.y -= Math.PI/2
+                    car.scene.traverse((o) => {
+                            if (o.isMesh) {
+                                o.material.emissive = new THREE.Color(Math.random() * 0xFFFFFF)
+                            }
+                        })
+                        //console.log(car)
+                    spawnObstacleAtDistance(car.scene)
+                },
+                // called while loading is progressing
+                function(xhr) {
+                    //console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+                },
+                // called when loading has errors
+                function(error) {
+                    console.log('An error happened')
+                }
+            )
+        }
+        else if(rndObs < 0.25){
+            gltfLoader.load(
+                // resource URL
+                'static/models/truck/scene.gltf',
+                // called when the resource is loaded
+                function(car) {
+                    car.scene.scale.set(baseScale*15, baseScale*15, baseScale*15)
+                    car.scene.traverse((o) => {
+                            if (o.isMesh) {
+                                o.material.emissive = new THREE.Color(Math.random() * 0x222222)
+                            }
+                        })
+                        //console.log(car)
+                    spawnObstacleAtDistance(car.scene)
+                },
+                // called while loading is progressing
+                function(xhr) {
+                    //console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+                },
+                // called when loading has errors
+                function(error) {
+                    console.log('An error happened')
+                }
+            )
+        }
+        else{
+            gltfLoader.load(
+                // resource URL
+                'static/models/car/scene.gltf',
+                // called when the resource is loaded
+                function(car) {
+                    car.scene.scale.set(baseScale, baseScale, baseScale)
+                    car.scene.traverse((o) => {
+                            if (o.isMesh) {
+                                o.material.emissive = new THREE.Color(Math.random() * 0xffffff)
+                            }
+                        })
+                        //console.log(car)
+                    spawnObstacleAtDistance(car.scene)
+                },
+                // called while loading is progressing
+                function(xhr) {
+                    //console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+                },
+                // called when loading has errors
+                function(error) {
+                    //console.log('An error happened')
+                }
+            )
+        }
+        
     }
 
     function doSomethingAfterXseconds(s) {
@@ -746,7 +809,7 @@ if (WEBGL.isWebGLAvailable()) {
             //spawnCoinFigureRandom()
             generateCity()
                 //spawnCityAfterXSeconds(Math.random()*1.8)
-            spawnCityAfterXSeconds(10)
+            spawnCityAfterXSeconds(8)
                 //coinSquare(Math.random() * 10)
                 //coinDiamond(Math.random() * 15)
         }, s * 1000)
@@ -760,6 +823,7 @@ if (WEBGL.isWebGLAvailable()) {
             }
             if (everyXSecondsCounter < 0.05) {
                 spawnRate = 0
+                everyXSecondsCounter = 1
             }
             if (everyXSecondsCounter - spawnRate < 0) {
 
@@ -864,7 +928,7 @@ if (WEBGL.isWebGLAvailable()) {
                         .to({
                                 x: camera.position.x - 10,
                                 y: camera.position.y - 10,
-                                z: camera.position.z - 2500,
+                                z: camera.position.z - 2700,
                             },
                             1000 * obs.animationSpeed
                         )
