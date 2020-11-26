@@ -61,7 +61,7 @@ if (WEBGL.isWebGLAvailable()) {
     vid.volume = 0.05;
     vid.play()
 
-    var camera, scene, renderer
+    var camera, scene, renderer, composer
     var controls
     let firstCity = true
     var objects = []
@@ -190,6 +190,15 @@ if (WEBGL.isWebGLAvailable()) {
         document.addEventListener('touchend', onDocumentTouchEnd, false);
         document.addEventListener("touchmove", handleMove, false);
 
+        composer = new POSTPROCESSING.EffectComposer(renderer)
+        composer.addPass(new POSTPROCESSING.RenderPass(scene, camera))
+
+        const effectPass = new POSTPROCESSING.EffectPass(
+            camera,
+            new POSTPROCESSING.BloomEffect()
+        );
+        effectPass.renderToScreen = true
+        composer.addPass(effectPass)
     }
     window.onload = function() {
         /*
@@ -1039,7 +1048,8 @@ if (WEBGL.isWebGLAvailable()) {
             })
         }
         //TWEEN Animations
-        renderer.render(scene, camera)
+        //renderer.render(scene, camera)
+        composer.render()
         if (mainShip && cursorY && cursorX) {
             //console.log(mainShip.rotation)
             if (isMobile()) {
