@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import * as OrbitControls from 'three-orbitcontrols'
 import * as FBXLoader from 'three-fbx-loader'
+import { BloomEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
+
 import {
     GLTFLoader
 } from 'three/examples/jsm/loaders/GLTFLoader'
@@ -190,12 +192,12 @@ if (WEBGL.isWebGLAvailable()) {
         document.addEventListener('touchend', onDocumentTouchEnd, false);
         document.addEventListener("touchmove", handleMove, false);
 
-        composer = new POSTPROCESSING.EffectComposer(renderer)
-        composer.addPass(new POSTPROCESSING.RenderPass(scene, camera))
+        composer = new EffectComposer(renderer)
+        composer.addPass(new RenderPass(scene, camera))
 
-        const effectPass = new POSTPROCESSING.EffectPass(
+        const effectPass = new EffectPass(
             camera,
-            new POSTPROCESSING.BloomEffect()
+            new BloomEffect()
         );
         effectPass.renderToScreen = true
         composer.addPass(effectPass)
@@ -320,15 +322,15 @@ if (WEBGL.isWebGLAvailable()) {
                 rndColors.push(0xFF4480)
                 rndColors.push(0xBB3456)
                 rndColors.push(0x400080)
-                let rndColor = randomIntBetweenXY(0,rndColors.length)
+                let rndColor = randomIntBetweenXY(0, rndColors.length)
 
                 city.scene.traverse((o) => {
                         if (o.isMesh) {
                             if (index == 3) {
-                                o.material.emissive = new THREE.Color(rndColors[rndColor]*0.2)
+                                o.material.emissive = new THREE.Color(rndColors[rndColor] * 0.2)
                             } else {
                                 o.material.emissive = new THREE.Color(rndColors[rndColor])
-                                //o.material.emissive = new THREE.Color(0x400080)
+                                    //o.material.emissive = new THREE.Color(0x400080)
 
                             }
                             index++
@@ -686,14 +688,14 @@ if (WEBGL.isWebGLAvailable()) {
         //console.log('Spawning incoming Car')
         let rndObs = Math.random()
         console.log("RANDOM OBS", rndObs)
-        if(rndObs < 0.1){
+        if (rndObs < 0.1) {
             gltfLoader.load(
                 // resource URL
                 'static/models/trailer/scene.gltf',
                 // called when the resource is loaded
                 function(car) {
-                    car.scene.scale.set(baseScale*1.5, baseScale*1.5, baseScale*1.5)
-                    car.scene.rotation.y -= Math.PI/2
+                    car.scene.scale.set(baseScale * 1.5, baseScale * 1.5, baseScale * 1.5)
+                    car.scene.rotation.y -= Math.PI / 2
                     car.scene.traverse((o) => {
                             if (o.isMesh) {
                                 o.material.emissive = new THREE.Color(Math.random() * 0xFFFFFF)
@@ -711,14 +713,13 @@ if (WEBGL.isWebGLAvailable()) {
                     console.log('An error happened')
                 }
             )
-        }
-        else if(rndObs < 0.25){
+        } else if (rndObs < 0.25) {
             gltfLoader.load(
                 // resource URL
                 'static/models/truck/scene.gltf',
                 // called when the resource is loaded
                 function(car) {
-                    car.scene.scale.set(baseScale*15, baseScale*15, baseScale*15)
+                    car.scene.scale.set(baseScale * 15, baseScale * 15, baseScale * 15)
                     car.scene.traverse((o) => {
                             if (o.isMesh) {
                                 o.material.emissive = new THREE.Color(Math.random() * 0x222222)
@@ -736,8 +737,7 @@ if (WEBGL.isWebGLAvailable()) {
                     console.log('An error happened')
                 }
             )
-        }
-        else{
+        } else {
             gltfLoader.load(
                 // resource URL
                 'static/models/car/scene.gltf',
@@ -762,7 +762,7 @@ if (WEBGL.isWebGLAvailable()) {
                 }
             )
         }
-        
+
     }
 
     function doSomethingAfterXseconds(s) {
@@ -830,7 +830,7 @@ if (WEBGL.isWebGLAvailable()) {
             if (everyXSecondsCounter < 2) {
                 spawnRate = 0.05
             }
-            if (everyXSecondsCounter < 0.05) {
+            if (everyXSecondsCounter < 1) {
                 spawnRate = 0
                 everyXSecondsCounter = 1
             }
