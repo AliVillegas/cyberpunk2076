@@ -116,7 +116,7 @@ img {
 body {
     line-height: 1;
     background-color: black;
-    background-image: url('/Images/future.jpg');
+    background-image: url('/static/images/future.jpg');
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -203,7 +203,7 @@ h2 {
     body {
         line-height: 1;
         background-color: black;
-        background-image: url('/Images/blade.jpg');
+        background-image: url('/static/images/blade.jpg');
         background-repeat: no-repeat;
         background-size: cover;
     }
