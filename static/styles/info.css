@@ -143,6 +143,8 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
+
+
 /*MY STYLE */
 
 #start {
@@ -176,13 +178,42 @@ h1 {
     font-family: 'Press Start 2P', cursive;
 }
 
-/************************************************/
-/*                                              */
-/*                  RESPONSIVE                  */
-/*                                              */
+p {
+    color: white;
+    line-height: 90px;
+    font-family: 'Press Start 2P', cursive;
+}
+
+h1 {
+    margin: auto;
+    font-size: 55px;
+    color: white;
+    text-align: center;
+    transform: translateY(47px);
+    font-family: 'Press Start 2P', cursive;
+}
+
+#instruc {
+    text-align: center;
+    font-size: 28px;
+}
+
+
 /************************************************/
 
-@media screen and (max-width: 1000px){
+
+/*                                              */
+
+
+/*                  RESPONSIVE                  */
+
+
+/*                                              */
+
+
+/************************************************/
+
+@media screen and (max-width: 1000px) {
     body {
         line-height: 1;
         background-color: black;
@@ -198,8 +229,8 @@ h1 {
         transform: translateY(47px);
         font-family: 'Press Start 2P', cursive;
     }
-    p{
-        color:white;
+    p {
+        color: white;
         line-height: 90px;
         font-family: 'Press Start 2P', cursive;
     }
@@ -212,7 +243,8 @@ h1 {
         font-size: 20px;
         transform: translate(75px, 570px);
     }
-    #instruc{
+    #instruc {
         text-align: center;
+        font-size: 15px;
     }
 }

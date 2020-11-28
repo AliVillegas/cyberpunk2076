@@ -1,95 +1,213 @@
 /* CSS RESET */
 
+
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
 */
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
 }
+
+
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section, img {
-	display: block;
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section,
+img {
+    display: block;
 }
+
 body {
-	line-height: 1;
+    line-height: 1;
     background-color: black;
     background-image: url('/static/images/wasted.jpg');
-
     background-repeat: no-repeat;
     background-size: cover;
 }
-ol, ul {
-	list-style: none;
+
+ol,
+ul {
+    list-style: none;
 }
-blockquote, q {
-	quotes: none;
+
+blockquote,
+q {
+    quotes: none;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
 }
+
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}/*MY STYLE */
-#start{
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+
+/*MY STYLE */
+
+#start {
     margin: 0 auto;
     margin-top: 150px;
     width: 60%;
-    border: 5px solid #ff0000;
-    color: #ff0000;
+    border: 5px solid #18ec35;
+    color: #18ec35;
     background-color: black;
     padding: 10px;
     font-size: 70px;
     bottom: 150px;
-    display:block;
-}
-button{
-    cursor:pointer;
-    
-}
-.button:hover{
-    background-color: #555555;
-  color: white;
+    display: block;
 }
 
-h1{
+#menuButton {
+    margin: 0 auto;
+    margin-top: 80px;
+    width: 60%;
+    border: 5px solid #d738ff;
+    color: #d738ff;
+    background-color: black;
+    padding: 10px;
+    font-size: 60px;
+    bottom: 130px;
+    display: block;
+}
+
+button {
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #555555;
+    color: white;
+}
+
+h1 {
     margin: auto;
-    font-size:  120px;
+    font-size: 120px;
     color: white;
     text-align: center;
     transform: translate(0px, 200px);
     width: 70%;
     font-family: 'Creepster', cursive;
 }
-/************************************************/
-/*                                              */
-/*                  RESPONSIVE                  */
-/*                                              */
+
+
 /************************************************/
 
-@media screen and (max-width: 1000px){
+
+/*                                              */
+
+
+/*                  RESPONSIVE                  */
+
+
+/*                                              */
+
+
+/************************************************/
+
+@media screen and (max-width: 1000px) {
     body {
         line-height: 1;
         background-color: black;
@@ -99,8 +217,8 @@ h1{
     }
     #start {
         margin: auto;
-        border: 5px solid #73AD21;
-        color: #73AD21;
+        border: 5px solid #18ec35;
+        color: #18ec35;
         background-color: black;
         padding: 10px;
         font-size: 45px;

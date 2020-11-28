@@ -6,6 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
     <link rel="icon" href="static/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <link rel="stylesheet" href="static/styles/intro.css">
     <title>Cyberpunk 2076</title>
@@ -14,11 +15,27 @@
 <body>
     <h1>CyberPunk 2076</h1>
     <button type="submit" onclick="startGame()" id="start">START</button>
-
+    <button type="submit" onclick="howToPlay()" id="htpButton">How to play</button>
+    <h2 id="highScore" style="display: none;">
+    </h2>
 </body>
 <script>
+    window.onload = (event) => {
+        if (localStorage.getItem("highScoreStore") !== null) {
+            $('#highScore').text("Farthest Distance: " + localStorage.getItem("highScoreStore") + " Km")
+            $('#highScore').show()
+        } else {
+            $('#highScore').hide()
+        }
+    };
+
     function startGame() {
         window.location.href = "game.html";
+
+    }
+
+    function howToPlay() {
+        window.location.href = "info.html";
 
     }
 </script>

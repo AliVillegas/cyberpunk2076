@@ -203,6 +203,7 @@ if (WEBGL.isWebGLAvailable()) {
         composer.addPass(effectPass)
     }
     window.onload = function() {
+
         /*
         const FizzyText = function() {
             this.music = false
@@ -854,7 +855,18 @@ if (WEBGL.isWebGLAvailable()) {
     }
 
     function endGame() {
-        window.location.href = "end.html";
+        if (localStorage.getItem("highScoreStore") !== null) {
+            let prevDistance = parseFloat(localStorage.getItem("highScoreStore"))
+            if (distanceTraveled / 100 > prevDistance) {
+                localStorage.setItem("highScoreStore", distanceTraveled / 100);
+            }
+        } else {
+            localStorage.setItem("highScoreStore", distanceTraveled / 100);
+
+        }
+
+
+        window.location.href = "index.html";
 
     }
 

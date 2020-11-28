@@ -4,6 +4,8 @@ body {
     margin: 0;
     font-size: 1.3rem;
     font-weight: normal;
+    /* Disables pull-to-refresh but allows overscroll glow effects. */
+    overscroll-behavior-y: contain;
 }
 
 .initiallyHidden {
@@ -102,25 +104,26 @@ p {
     width: 400px;
     margin: 5em auto 0;
 }
-div{
-    width: 102%;
 
+div {
+    width: 102%;
 }
-#score{
+
+#score {
     margin: auto;
     top: 80px;
     position: absolute;
     z-index: 100;
     overflow: auto;
-    color:#FF33F5;   
+    color: #FF33F5;
     font-size: 70px;
 }
 
-#distanceTraveled{
+#distanceTraveled {
     margin: auto;
     position: absolute;
     z-index: 100;
     overflow: auto;
-    color:#28f032;   
+    color: #28f032;
     font-size: 70px;
 }
