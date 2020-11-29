@@ -1,4 +1,5 @@
-Contents
+## **Contents**
+
 [Running the project](#To-run)
 
 [Deploying the project](#Deployment)
@@ -63,11 +64,26 @@ This project was developed using ThreeJs.
 We used GLTF models for every object within our game 
 
 ***Documentation Notes*** 
-*[Main Menu](##Main-Menu)
-[Scene](##Scene)
+[Main Menu](#Main-Menu)
+
+[Scene](#Scene)
+
 [Loading Models](#Loading-Models )
-[Music ](##Music)
-[Post Processing](##Post-processing)*
+
+[Music ](#Music)
+
+[Post Processing](#Post-processing)
+
+[Obstacles](#Procedural-Obstacles)
+
+[City](#City)
+
+[Collisions](#Collisions)
+
+[HUD](#Distance-travelled-and-Score )
+
+[High Score](#Storing-User-High-Score )
+
 
 ### Main Menu
 This was created using standard js html and css  with a responsive view in mind to allow mobile compatibility
@@ -88,8 +104,38 @@ This allows you to create a media object bundled with our theme song
 For post processing effects we used Threejs Effectrenderer and EffectPasses.
 In order to show a bloom effect within our scene. 
 
+### Procedural Obstacles
+Incoming cars, trucks and trailers spawn randomly throught our game. This spawning becomes harder and harder as the time goes on.
+This was achieved using standard SetTimeoutFunctions and spawnrate variables. 
+Furthermore a spawn percentage multiplier was chosen to manage the rarity of trucks and trailers 
+The movement of these obstacles was managed using TWEEN animations 
+
+### City
+To populate our scene we decided to add a moving city background. 
+This was achieved by loading a city model and then scaling its size massively 
+The movement of the city was managed using TWEEN animations. With a really slow time we created the effect of going through the city. An array of 5 colors was created to spawn different variants of the city. And to further increase the uniqueness of each city we randomly rotated the spawn point of the city to simulate a different city every 10 seconds. 
 
 
+### Coins 
+Coins are spawned similarly as our obstacles. However, a rarity multiplier was applied in order to spawn figures such as squares, triangles and circles. These figures were created using THREE js groups and adding them to the scene as a single object. 
+
+### Collisons 
+
+These were possible using Threejs own collision implementation with Box3. So every time our friendly car came into contact with any obstacle a method is fired to modify the score of the user. 
+
+### Distance Travelled and Score 
+
+In order to display the HUD info to the user, we used css and html text. This is being modified on every frame with js. 
+
+### Storing User High Score
+
+We used localstorage to save the user highest score for next games. 
+
+
+
+
+
+## Live Demo
 
 
 Live demo of current build: https://alivillegas.github.io/cyberpunk2076/
